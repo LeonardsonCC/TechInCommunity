@@ -14,7 +14,6 @@
     />
     <v-spacer />
     <!---right part -->
-    <v-btn dark color="success" href="https://www.wrappixel.com/templates/materialpro-vuetify-admin/">Upgrade to Pro</v-btn>
     <v-menu bottom left transition="scale-transition">
       <template v-slot:activator="{ on }">
         <v-btn dark icon v-on="on">
