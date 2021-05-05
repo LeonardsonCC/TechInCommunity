@@ -350,6 +350,12 @@ export default {
     }
   },
 
+  created: function () {
+    if (!sessionStorage.getItem("auth_token")) {
+      this.$router.push({ name: 'Login' });
+    }
+  },
+
   methods: {
     create() {
       this.tasks.push({

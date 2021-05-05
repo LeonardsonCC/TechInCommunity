@@ -14,6 +14,11 @@ export default new Router({
             children: [
                 // Components
                 {
+                    name: 'Login',
+                    path: 'login',
+                    component: () => import('@/views/pages/Login'),
+                },
+                {
                     name: 'Alerts',
                     path: 'pages/alerts',
                     component: () => import('@/views/pages/Alerts'),
