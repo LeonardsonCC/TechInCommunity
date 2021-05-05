@@ -1,0 +1,7 @@
+## Passos para iniciar o backend
+1. Comando "npm install" para instalar os pacotes
+2. Instalar Knex globalmente "npm install knex -g"
+3. Configurar o arquivo knexfile.js para realizar a conexão com o MySQL instalado
+4. Criar um schema com o mesmo nome presente no knexfile.js
+5. Executar o comando "knex migrate:latest" para criar as tabelas para o banco de dados
+6. Executar o comando "npm start" para iniciar a aplicação.
