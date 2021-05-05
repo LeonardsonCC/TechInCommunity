@@ -1,106 +1,77 @@
 const authSecret = process.env.AUTHSECRET
-const jwt = require('jwt-simple')
+const tokenLifeTime = process.env.TOKENLIFETIME
 const bcrypt = require('bcrypt-nodejs')
+var jwt = require("jwt-simple");
 
 module.exports = app => 
 {
 
-    /*  Metodo responsavel por login onde é retornado e definido 
-    *   um token de usuario
-    */
-    const signin = async (req, res) => {
+    //Método responsável por verificar se as credenciais de supermercados estão corretas e retornar um token 
+    const login_supermarket = async (req, res) => {
         //Caso não for informado o email e senha
-        if (!req.body.email || !req.body.senha) {
-            return res.status(400).send('Informe usuário e senha!')
+        if (!req.body.email || !req.body.password) {
+            return res.status(400).json({msg:"Usuário ou senha não informados!"})
         }
 
-        const cliente = await app.db('cliente')
+        const supermarket = await app.db('supermarket')
             .where({ email: req.body.email })
             .first()
 
         //Verifica se o email está cadastrado
-        if(!cliente) return res.status(400).send('Email não cadastrado!')
+        if(!supermarket) return res.status(400).json({msg:"O email informado não existe!!"})
 
-        //Verifica se a senha fornecido pelo usuario se identifica com o usuario cadastrado
-        const isMatch = bcrypt.compareSync(req.body.senha, cliente.senha)
-        if (!isMatch) return res.status(401).send('Senha inválida!')
+        //Verifica se a senha fornecida pelo usuario pertence ao usuário cadastrado
+        const isMatch = bcrypt.compareSync(req.body.password, supermarket.password)
+        if (!isMatch) return res.status(401).json({msg:"Senha incorreta!"})
 
 
-        criaSession(req, cliente)
-        req.session.carrinho = []
+        let token = createToken(req, supermarket)
 
-		res.redirect('/')
+		return res.json({token:token})
     }
 
-    //Ele valida a consistencia do token JWT
-    const validateToken = async (req, res) => {
-        const userData = req.body || null
+    //Método que valida se um token é valido e não está expirado
+    const requireToken = async (req, res, next) => {
+		let bearerHeader = req.headers["authorization"]
         try {
-            if(userData) {
-                const token = jwt.decode(userData.token, authSecret)
-                if(new Date(token.exp * 1000) > new Date()) {
-                    return res.send(true)
+            if(typeof bearerHeader !== 'undefined' && bearerHeader.substr(0,7) === 'Bearer ') {
+				let token = bearerHeader.split(" ")[1]
+                let payload = jwt.decode(token, authSecret)
+				let now = Math.floor(Date.now() / 1000)
+
+                if(payload.exp < now) {
+                    return res.status(401).json({msg:"Token expirado!"})
                 }
+
+				req.payload = jwt.decode(token, authSecret)
+				
+				next();
             }
+			else{
+				return res.status(400).json({msg:"Token não enviado!"})
+			}
         } catch(e) {
-            // problema com o token
-        }
-
-        res.send(false)
-    }
-
-    /*Verifica se a sessão existe*/
-	const validateSession = async (req, res, next) => {
-		session = req.session;
-		if(session.cliente){
-			next()
-		}
-		else{
-			return res.redirect('/Cliente/Login')
-		}
-	}
-
-    /*Verifica se o usuário é admin*/
-    const validateAdmin = async (req, res, next) => {
-        session = req.session;
-        if (!session.cliente){
-            return res.redirect('/Cliente/Login')
-        }
-        if(session.cliente.tipo == 'ADMIN'){
-            next()
-        }
-        else{
-            return res.redirect('/')
+			console.log(e)
+            return res.status(401).json({msg:"Token inválido!"})
         }
     }
 
-    function criaSession(req, cliente){
+    //Método responsável por criar um token e guardá-lo em uma sessão, para as outras funções da rota utilizarem
+    function createToken(req, obj){
        //Tempo atual
         const now = Math.floor(Date.now() / 1000)
 
         //Definindo payload do JWT
         const payload = {
-            cliente:{
-                id:     cliente.id,
-                nome:   cliente.nome,
-                email:  cliente.email,
-                tipo:   cliente.tipo,
-                imagem: cliente.imagem,
-            },
-            iat: now,
-            exp: now + (60 * 60 * 24 * 3)
+            exp: now + (tokenLifeTime*60),
+			id: obj.id,
         }
 
-        //Rest operator pegua os argumentos e adiciona, apos ele gera um token JWT
-        var token = jwt.encode(payload, authSecret)
-        var session = req.session;
-        
-        session.cliente = jwt.decode(token, authSecret).cliente
+        let token = jwt.encode(payload, authSecret)
+		
+		return token
     }
 
-    const logout = async (req, res, next) => {
-            req.session.destroy()
-            return res.redirect('/Cliente/Login')
-    }
-    return { signin, logout, validateSession, validateAdmin, criaSession }
+	return { login_supermarket, requireToken }
 }
+    

@@ -13,8 +13,7 @@ module.exports = app => {
     const create = async(req, res) => {
         //Recebe o body da requisição
         let obj_body = { ...req.body };
-        
-		console.log(req);
+
         try {
             existsOrError(obj_body.name,    'Nome não informado!')
             existsOrError(obj_body.email,   'E-mail não informado!')
@@ -25,9 +24,17 @@ module.exports = app => {
             equalsOrError(obj_body.password, obj_body.password2,
                 'Senhas não conferem!')
 
-            const obj_bodyFromDB = await app.db('supermarket')
+            let obj_bodyFromDB = await app.db('supermarket')
                 .where({ email: obj_body.email }).first()
             notExistsOrError(obj_bodyFromDB, 'Email já cadastrado!')
+			
+            obj_bodyFromDB = await app.db('supermarket')
+                .where({ cnpj: obj_body.cnpj }).first()
+            notExistsOrError(obj_bodyFromDB, 'CNPJ já cadastrado!')
+			
+            obj_bodyFromDB = await app.db('supermarket')
+                .where({ phone: obj_body.phone }).first()
+            notExistsOrError(obj_bodyFromDB, 'CNPJ já cadastrado!')
         }
     	catch(err) {
             return res.status(400).json({msg:err})
