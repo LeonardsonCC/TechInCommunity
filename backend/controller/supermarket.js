@@ -41,11 +41,17 @@ module.exports = app => {
         }
 
         obj_body.password = encryptPassword(obj_body.password)
-        delete obj_body.password2
+
+		obj_to_insert = {}
+		obj_to_insert.name = obj_body.name
+		obj_to_insert.email = obj_body.email
+		obj_to_insert.phone = obj_body.phone
+		obj_to_insert.cnpj = obj_body.cnpj
+		obj_to_insert.password = obj_body.password
 
         app.db('supermarket')
-        	.insert(obj_body)
-        	.then(() => res.json({msg:"Mercado "+obj_body.name+" cadastrado com sucesso!"}))
+        	.insert(obj_to_insert)
+        	.then(() => res.json({msg:"Mercado "+obj_to_insert.name+" cadastrado com sucesso!"}))
         	.catch(
                 function(err) {
                     res.status(400).json({msg:err})
