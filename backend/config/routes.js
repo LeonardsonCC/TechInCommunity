@@ -10,7 +10,7 @@ module.exports = app =>{
 
     app.route('/supermarket/login')
 	    .post(auth.login_supermarket)
-		
+
 	app.route('/test/token')
 	    .all(auth.requireToken)
 		.get(function(req, res){

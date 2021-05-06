@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
         table.specificType('password', 'CHAR(64)').notNull()
         table.string('phone', 18).notNull()
         table.string('logo', 200).defaultTo('default-logo.jpg')
+		table.integer('active').defaultTo(1)
     })
 };
 

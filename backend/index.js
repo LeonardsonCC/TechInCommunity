@@ -18,7 +18,6 @@ app.db = db;
  *  Carregamento automatico das libs
 */
 consign()
-  .include("./config/passport.js")
   .then("./core")
   .then("./controller")
   .then("./config")
