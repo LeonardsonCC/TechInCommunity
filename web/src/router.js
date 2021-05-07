@@ -7,17 +7,17 @@ export default new Router({
     mode: 'hash',
     base: process.env.BASE_URL,
     routes: [
-        {
+						{
+								name: 'Login',
+								path: '/login',
+								component: () => import('@/views/pages/Login'),
+						},
+						{
             path: '/',
             redirect: 'dashboard/basic-dashboard',
             component: () => import('@/layouts/Layout'),
             children: [
                 // Components
-                {
-                    name: 'Login',
-                    path: 'login',
-                    component: () => import('@/views/pages/Login'),
-                },
                 {
                     name: 'Alerts',
                     path: 'pages/alerts',

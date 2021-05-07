@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid class="down-top-padding">
+  <v-container fill-height fluid class="down-top-padding">
     <v-layout align-center justify-center>
       <v-flex xs12 sm8 md6>
-        <v-col cols="12" lg="8">
+        <v-col cols="12" lg="8" offset-lg="2">
           <v-card>
             <v-card-text>
               <h3 class="title blue-grey--text text--darken-2 font-weight-regular">Entrar</h3>
@@ -28,8 +28,9 @@
                 counter
                 @click:append="show1 = !show1"
               ></v-text-field>
+							<span>Não possui uma conta? <router-link to="criar-conta-mercado">Cadastre-se</router-link></span>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions >
               <v-spacer></v-spacer>
               <v-btn color="primary"
                 elevation="2"
