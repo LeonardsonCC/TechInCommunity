@@ -13,6 +13,11 @@ export default new Router({
 								component: () => import('@/views/pages/Login'),
 						},
 						{
+								name: 'CriarContaMercado',
+								path: '/criar-conta-mercado',
+								component: () => import('@/views/pages/CriarContaMercado'),
+						},
+						{
             path: '/',
             redirect: 'dashboard/basic-dashboard',
             component: () => import('@/layouts/Layout'),
