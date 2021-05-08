@@ -8,6 +8,14 @@ module.exports = app =>{
 			return res.json({status: "Funcionando! :)"});
 		})
 
+    app.route('/product/search')
+        .get(controller.product.list)
+
+    app.route('/product')
+        .all(auth.requireToken)
+        .post(controller.product.create)
+        .put(controller.product.update)
+
     app.route('/supermarket/login')
 	    .post(auth.login_supermarket)
 

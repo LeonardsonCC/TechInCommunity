@@ -65,32 +65,32 @@ module.exports = app => {
 		return res.json({status: "Coming soon..."});
         
     }
-
-    const list = async(req, res) => {
-		if(req.query.supermarket_id && req.query.supermarket_id !== ""){
-			let result = await app.db('supermarket')
-			   .select(['name','cnpj','phone','logo'])
-               .where({ id: req.query.supermarket_id }).first()
-			   
-			if(result){
-				return res.json(result);
-			}
-			else{
-				return res.json({msg: "Este supermercado não existe!"});
-			}
-		}
-		else{
-			let result = await app.db('supermarket')
-			   .select(['name','cnpj','phone','logo'])
-			if(result){
-				return res.json(result);
-			}
-			else{
-				return res.json({msg: "Não há supermercados cadastrados!"});
-			}
-		}
-    }
 	
+    const list = async(req, res) => {
+        if(req.query.supermarket_id && req.query.supermarket_id !== ""){
+            let result = await app.db('supermarket')
+               .select(['name','cnpj','phone','logo'])
+               .where({ id: req.query.supermarket_id }).first()
+               
+            if(result){
+                return res.json(result);
+            }
+            else{
+                return res.json({msg: "Este supermercado não existe!"});
+            }
+        }
+        else{
+            let result = await app.db('supermarket')
+               .select(['name','cnpj','phone','logo'])
+            if(result){
+                return res.json(result);
+            }
+            else{
+                return res.json({msg: "Não há supermercados cadastrados!"});
+            }
+        }
+    }
+
 	//Retorna os métodos
 	return { create, update, list}
 }

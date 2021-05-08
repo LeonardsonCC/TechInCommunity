@@ -11,7 +11,7 @@ const bodyParser = require("body-parser");
 
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')))
+app.use("/public/images/",express.static(path.join(__dirname, 'public', 'images')))
 app.db = db;
 
 /*
