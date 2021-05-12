@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@mdi/js": "^5.7.55",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
     "moment": "^2.29.1",

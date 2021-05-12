@@ -12,8 +12,7 @@
 							<v-row>
 								<v-col cols="12" md="6">
 									<v-text-field
-										v-model="razaoSocial"
-										label="Razao Social"
+										label="Razao Social (nao usado)"
 										filled
 										background-color="transparent"
 									></v-text-field>
@@ -36,13 +35,20 @@
 								</v-col>
 								<v-col cols="12" md="6">
 									<v-text-field
-										v-model="cnae"
-										label="CNAE"
+										label="CNAE (nao usado)"
 										filled
 										background-color="transparent"
 									></v-text-field>
 								</v-col>
 
+								<v-col cols="12" md="12">
+									<v-text-field
+										v-model="phone"
+										label="Telefone"
+										filled
+										background-color="transparent"
+									></v-text-field>
+								</v-col>
 								<v-col cols="12" md="12">
 									<v-text-field
 										v-model="email"
@@ -68,7 +74,7 @@
 								</v-col>
 								<v-col cols="12" md="6">
 									<v-text-field
-										v-model="password"
+										v-model="password2"
 										filled
 										background-color="transparent"
 										:append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -90,6 +96,7 @@
               <v-btn color="primary"
                 elevation="2"
                 block
+                @click="submitForm"
               >Criar conta</v-btn>
             </v-card-actions>
           </v-card>
@@ -100,12 +107,17 @@
 </template>
 
 <script>
+import { axiosNotLoggedInstance as api } from "../../api";
 
 export default {
   name: "Login",
   data: () => ({
       email: "",
       password: "",
+      password2: "",
+      nomeFantasia: "", // name
+      cnpj: "",
+      phone: "",
       show1: false,
       rules: {
         required: value => !!value || "Obrigatorio.",
@@ -113,5 +125,35 @@ export default {
         emailMatch: () => "E-mail ou senha nao correspondentes"
       },
     }),
+  methods: {
+    submitForm: function () {
+      if (!this.email && 
+        !this.password && 
+        !this.password2 && 
+        !this.nomeFantasia && 
+        !this.cnpj && 
+        !this.phone) {
+        console.error("Campo Faltando");
+        // TODO Melhorar retorno do erro
+      }
+      
+      api({
+        method: "post",
+        url: "supermarket",
+        data: JSON.stringify({
+          name: this.name,
+          cnpj: this.cnpj,
+          email: this.email,
+          phone: this.phone,
+          password: this.password,
+          password2: this.password2
+        })
+      })
+        .then((response) => {
+          console.log("Resposta do cadastro: ", response);
+        })
+        .catch((err) => console.error(err));
+    }
+  }
 };
 </script>
