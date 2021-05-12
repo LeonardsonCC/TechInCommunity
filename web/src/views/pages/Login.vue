@@ -35,6 +35,7 @@
               <v-btn color="primary"
                 elevation="2"
                 block
+                @click="submitForm"
               >Entrar</v-btn>
             </v-card-actions>
           </v-card>
@@ -45,6 +46,7 @@
 </template>
 
 <script>
+import { axiosNotLoggedInstance as api } from "../../api";
 
 export default {
   name: "Login",
@@ -58,5 +60,27 @@ export default {
         emailMatch: () => "E-mail ou senha nao correspondentes"
       },
     }),
+  methods: {
+      submitForm: function () {
+          if (!this.email || !this.password) {
+              console.error("Campos nao preenchidos");
+              // TODO Melhorar retorno do erro
+              return
+          }
+          
+          api({
+              method: "post",
+              url: "supermarket/login",
+              data: JSON.stringify({
+                  email: this.email,
+                  password: this.password,
+              })
+          })
+            .then((response) => {
+              console.log("Resposta do cadastro: ", response);
+            })
+            .catch((err) => console.error(err));
+      }
+  }
 };
 </script>

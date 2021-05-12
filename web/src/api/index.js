@@ -10,7 +10,6 @@ const axiosInstance = axios.create({
     "Authorization": `Bearer ${authorizationToken}`
   }
 })
-export default axiosInstance;
 
 // Not Logged Users (Used in first Sign In or Login)
 const axiosNotLoggedInstance = axios.create({
@@ -18,4 +17,6 @@ const axiosNotLoggedInstance = axios.create({
   timeout: 1000,
   responseType: 'json'
 })
+
 export { axiosNotLoggedInstance };
+export default axiosInstance;

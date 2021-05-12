@@ -127,11 +127,11 @@ export default {
     }),
   methods: {
     submitForm: function () {
-      if (!this.email && 
-        !this.password && 
-        !this.password2 && 
-        !this.nomeFantasia && 
-        !this.cnpj && 
+      if (!this.email || 
+        !this.password || 
+        !this.password2 || 
+        !this.nomeFantasia || 
+        !this.cnpj || 
         !this.phone) {
         console.error("Campo Faltando");
         // TODO Melhorar retorno do erro
