@@ -135,6 +135,7 @@ export default {
         !this.phone) {
         console.error("Campo Faltando");
         // TODO Melhorar retorno do erro
+        return;
       }
       
       api({
