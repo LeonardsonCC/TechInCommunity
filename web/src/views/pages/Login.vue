@@ -42,15 +42,38 @@
         </v-col>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+    >
+      {{ snackbar.message }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar.show = false"
+        >
+          Fechar
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
 import { axiosNotLoggedInstance as api } from "../../api";
+import { setAuthToken } from "../../providers/authorization";
 
 export default {
   name: "Login",
   data: () => ({
+      snackbar: {
+        show: false,
+        message: "",
+        color: "white",
+      },
       email: "",
       password: "",
       show1: false,
@@ -59,14 +82,28 @@ export default {
         min: v => v.length >= 8 || "Min 8 caracteres",
         emailMatch: () => "E-mail ou senha nao correspondentes"
       },
-    }),
+  }),
+
+  created: function () {
+    if (sessionStorage.getItem("auth_token")) {
+      this.$router.push({ name: 'dashboard' });
+    }
+  },
+
   methods: {
       submitForm: function () {
+          const self = this;
+
           if (!this.email || !this.password) {
-              console.error("Campos nao preenchidos");
-              // TODO Melhorar retorno do erro
+              self.snackbar.show = true;
+              self.snackbar.message = "Por favor, preencha todos os campos!";
+              self.snackbar.color = "red";
               return
           }
+
+          self.snackbar.show = true;
+          self.snackbar.message = "Estamos verificando suas credenciais...";
+          self.snackbar.color = "blue";
           
           api({
               method: "post",
@@ -76,10 +113,22 @@ export default {
                   password: this.password,
               })
           })
-            .then((response) => {
-              console.log("Resposta do cadastro: ", response);
+            .then(({ data }) => {
+              setAuthToken(data.token);
+
+              self.snackbar.show = true;
+              self.snackbar.message = "Login feito com sucesso!";
+              self.snackbar.color = "green";
+
+              self.$router.push({ name: 'dashboard' });
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+              if (err.response) {
+                self.snackbar.show = true;
+                self.snackbar.message = err.response.data.msg;
+                self.snackbar.color = "red";
+              }
+            });
       }
   }
 };

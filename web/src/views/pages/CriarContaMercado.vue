@@ -112,6 +112,11 @@ import { axiosNotLoggedInstance as api } from "../../api";
 export default {
   name: "Login",
   data: () => ({
+      snackbar: {
+        show: false,
+        message: "",
+        color: "white",
+      },
       email: "",
       password: "",
       password2: "",
@@ -127,22 +132,29 @@ export default {
     }),
   methods: {
     submitForm: function () {
+      const self = this;
+
       if (!this.email || 
         !this.password || 
         !this.password2 || 
         !this.nomeFantasia || 
         !this.cnpj || 
         !this.phone) {
-        console.error("Campo Faltando");
-        // TODO Melhorar retorno do erro
+        self.snackbar.show = true;
+        self.snackbar.message = "Por favor, preencha todos os campos!";
+        self.snackbar.color = "red";
         return;
       }
       
+      self.snackbar.show = true;
+      self.snackbar.message = "Estamos verificando seus dados...";
+      self.snackbar.color = "blue";
+
       api({
         method: "post",
         url: "supermarket",
         data: JSON.stringify({
-          name: this.name,
+          name: this.nomeFantasia,
           cnpj: this.cnpj,
           email: this.email,
           phone: this.phone,
@@ -150,10 +162,20 @@ export default {
           password2: this.password2
         })
       })
-        .then((response) => {
-          console.log("Resposta do cadastro: ", response);
+        .then(() => {
+          self.snackbar.show = true;
+          self.snackbar.message = "Cadastro feito com sucesso!";
+          self.snackbar.color = "green";
+          
+          self.$router.push({ name: "Login"  });
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          if (err.response) {
+            self.snackbar.show = true;
+            self.snackbar.message = err.response.data.msg;
+            self.snackbar.color = "red";
+          }
+        });
     }
   }
 };

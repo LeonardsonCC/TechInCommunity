@@ -7,7 +7,8 @@ const axiosInstance = axios.create({
   timeout: 1000,
   responseType: 'json',
   headers: {
-    "Authorization": `Bearer ${authorizationToken}`
+    "Authorization": `Bearer ${authorizationToken}`,
+    "Content-Type": `application/json; charset=utf-8`
   }
 })
 
@@ -15,7 +16,10 @@ const axiosInstance = axios.create({
 const axiosNotLoggedInstance = axios.create({
   baseURL: "http://localhost:8081/",
   timeout: 1000,
-  responseType: 'json'
+  responseType: 'json',
+  headers: {
+    "Content-Type": `application/json; charset=utf-8`
+  }
 })
 
 export { axiosNotLoggedInstance };
