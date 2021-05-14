@@ -51,7 +51,7 @@ module.exports = app => {
 
         if(obj_body.logo){
             let types = {"i":".png","/":".jpg"};
-            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "");
+            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
             let type = types[base64Data.charAt(0)];
 
             if(type !== ".jpg" && type !== ".png"){
@@ -110,7 +110,7 @@ module.exports = app => {
 
         if(obj_body.logo){
             let types = {"i":".png","/":".jpg"};
-            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "");
+            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
             let type = types[base64Data.charAt(0)];
 
             if(type !== ".jpg" && type !== ".png"){

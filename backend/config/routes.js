@@ -34,4 +34,9 @@ module.exports = app =>{
 		.post(controller.supermarket.create)
 		.put(auth.requireToken, controller.supermarket.update)
 
+    app.route('/category')
+        .get(controller.category.list)
+        .post(auth.requireToken, controller.category.create)
+        .put(auth.requireToken, controller.category.update)
+
 }
