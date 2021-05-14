@@ -26,9 +26,12 @@ module.exports = app =>{
 			return res.json({status: "Logado através do id: "+id});
 		})
 
+    app.route('/supermarket/private')
+    	.get(auth.requireToken, controller.supermarket.private)
+
 	app.route('/supermarket')
 		.get(controller.supermarket.list)
 		.post(controller.supermarket.create)
-		.put(controller.supermarket.update)
+		.put(auth.requireToken, controller.supermarket.update)
 
 }

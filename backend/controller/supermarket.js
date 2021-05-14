@@ -49,6 +49,28 @@ module.exports = app => {
 		obj_to_insert.cnpj = obj_body.cnpj
 		obj_to_insert.password = obj_body.password
 
+        if(obj_body.logo){
+            let types = {"i":".png","/":".jpg"};
+            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "");
+            let type = types[base64Data.charAt(0)];
+
+            if(type !== ".jpg" && type !== ".png"){
+                return res.status(400).json({msg:"Tipo de imagem inválido! (Deve ser .png ou .jpg)"});       
+            }
+
+            let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
+
+            try{
+                fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            }
+            catch(err){
+                console.log(err);
+                return res.status(400).json({msg:"Ocorreu um erro ao salvar a imagem!"});
+            }
+
+            obj_to_insert.logo = file_name;
+        }
+
         app.db('supermarket')
         	.insert(obj_to_insert)
         	.then(() => res.json({msg:"Mercado "+obj_to_insert.name+" cadastrado com sucesso!"}))
@@ -61,11 +83,75 @@ module.exports = app => {
     }
 
     const update = async(req, res) => {
+    	let supermarket_id = req.payload.id;
+    	let obj_body = { ...req.body };
 
-		return res.json({status: "Coming soon..."});
-        
+        let supermarket = await app.db('supermarket')
+            .where({ id: supermarket_id }).first()
+
+        keys = Object.keys(obj_body)
+ 
+        /*Pra cada chave encontrada, ele verifica se há algo dentro da chave, 
+        se existir, realiza a mudança no produto*/
+        for (index in keys){
+            if(obj_body[keys[index]] && supermarket[keys[index]] && obj_body[keys[index]].toString().trim() !== ""){
+                supermarket[keys[index]] = obj_body[keys[index]]
+            }
+        }
+
+        if(obj_body.password && obj_body.password.toString().trim() !== ""){
+        	if(obj_body.password !== obj_body.password2){
+        		return res.status(400).json({msg:"As senhas não conferem!"});
+        	}
+        	else{
+        		supermarket.password = encryptPassword(obj_body.password);
+        	}
+        }
+
+        if(obj_body.logo){
+            let types = {"i":".png","/":".jpg"};
+            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "");
+            let type = types[base64Data.charAt(0)];
+
+            if(type !== ".jpg" && type !== ".png"){
+                return res.status(400).json({msg:"Tipo de imagem inválido! (Deve ser .png ou .jpg)"});       
+            }
+
+            let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
+
+            try{
+                fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            }
+            catch(err){
+                console.log(err);
+                return res.status(400).json({msg:"Ocorreu um erro ao salvar a imagem!"});
+            }
+
+            supermarket.logo = file_name;
+        }
+
+        app.db('supermarket')
+            .where({id: supermarket_id})
+            .update(supermarket)
+            .then(() => res.json({msg:"Mercado "+supermarket.name+" atualizado com sucesso!"}))
+            .catch(
+                function(err){
+                	console.log(err)
+                    res.status(400).json({msg:"Ocorreu um erro ao atualizar o supermercado!"})
+                }
+            )        
     }
 	
+    const private = async(req, res) => {
+        let supermarket_id = req.payload.id;
+
+        let result = await app.db('supermarket')
+           .select(['name','email', 'cnpj','phone','logo'])
+           .where({ id: supermarket_id }).first()
+
+        return res.json(result);
+    }
+
     const list = async(req, res) => {
         if(req.query.supermarket_id && req.query.supermarket_id !== ""){
             let result = await app.db('supermarket')
@@ -92,5 +178,5 @@ module.exports = app => {
     }
 
 	//Retorna os métodos
-	return { create, update, list}
+	return { create, update, list, private}
 }
