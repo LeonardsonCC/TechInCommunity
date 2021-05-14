@@ -82,3 +82,29 @@ elif(option == "update_product"):
     r = requests.put("http://localhost:8081/product", headers=headers, json=produto_exemplo)
 
     print(r.text)
+elif(option == "create_category"):
+    categoria_exemplo = {
+    'name':'Ovos de páscoa',
+    'description':'Blabla bla qualquer coisa aqui'
+    }
+
+    headers = {
+    'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjEwMzY2MDksImlkIjozfQ.SiRia-2oD70gPlTWpdTaxwnRiE2ONw0lRVFiisJHP24'
+    }
+    
+    r = requests.post("http://localhost:8081/category", headers=headers, json=categoria_exemplo)
+
+    print(r.text)
+elif(option == "update_category"):
+    categoria_exemplo = {
+    'id':16,
+    'description':'wow will waw'
+    }
+
+    headers = {
+    'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjEwMzY2MDksImlkIjozfQ.SiRia-2oD70gPlTWpdTaxwnRiE2ONw0lRVFiisJHP24'
+    }
+    
+    r = requests.put("http://localhost:8081/category", headers=headers, json=categoria_exemplo)
+
+    print(r.text)
