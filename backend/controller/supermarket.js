@@ -4,6 +4,7 @@ const  fs = require('fs');
 
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.core.validation
+    const { uploadImgBase64 } = app.core.upload
 
     const encryptPassword = password => {
         const salt = bcrypt.genSaltSync(10)
@@ -50,25 +51,12 @@ module.exports = app => {
 		obj_to_insert.password = obj_body.password
 
         if(obj_body.logo){
-            let types = {"i":".png","/":".jpg"};
-            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
-            let type = types[base64Data.charAt(0)];
-
-            if(type !== ".jpg" && type !== ".png"){
-                return res.status(400).json({msg:"Tipo de imagem inválido! (Deve ser .png ou .jpg)"});       
-            }
-
-            let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
-
-            try{
-                fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            try {
+                obj_to_insert.logo = uploadImgBase64(obj_body.logo)
             }
             catch(err){
-                console.log(err);
-                return res.status(400).json({msg:"Ocorreu um erro ao salvar a imagem!"});
+                return res.status(400).json({msg:err})
             }
-
-            obj_to_insert.logo = file_name;
         }
 
         app.db('supermarket')
@@ -109,25 +97,12 @@ module.exports = app => {
         }
 
         if(obj_body.logo){
-            let types = {"i":".png","/":".jpg"};
-            let base64Data = obj_body.logo.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
-            let type = types[base64Data.charAt(0)];
-
-            if(type !== ".jpg" && type !== ".png"){
-                return res.status(400).json({msg:"Tipo de imagem inválido! (Deve ser .png ou .jpg)"});       
-            }
-
-            let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
-
-            try{
-                fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            try {
+                supermarket.logo = uploadImgBase64(obj_body.logo)
             }
             catch(err){
-                console.log(err);
-                return res.status(400).json({msg:"Ocorreu um erro ao salvar a imagem!"});
+                return res.status(400).json({msg:err})
             }
-
-            supermarket.logo = file_name;
         }
 
         app.db('supermarket')

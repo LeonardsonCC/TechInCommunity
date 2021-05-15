@@ -2,6 +2,7 @@ const  fs = require('fs');
 
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.core.validation
+    const { uploadImgBase64 } = app.core.upload
 
     const create = async(req, res) => {
         //Recebe o body da requisição
@@ -31,25 +32,13 @@ module.exports = app => {
         }
 
         if(obj_body.picture){
-            let types = {"i":".png","/":".jpg"};
-            let base64Data = obj_body.picture.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
-            let type = types[base64Data.charAt(0)];
-
-            if(type !== ".jpg" && type !== ".png"){
-                return res.status(400).json({msg:"Tipo de imagem inválido! (Deve ser .png ou .jpg)"});       
-            }
-
-            let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
-
-            try{
-                fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            try {
+                obj_to_insert.picture = uploadImgBase64(obj_body.picture)
             }
             catch(err){
-                console.log(err);
-                return res.status(400).json({msg:"Ocorreu um erro ao salvar a imagem!"});
+                console.log(err)
+                return res.status(400).json({msg:err})
             }
-
-            obj_to_insert.picture = file_name;
         }
 
 		obj_to_insert.price = obj_body.price;
@@ -105,25 +94,12 @@ module.exports = app => {
         }
 
         if(obj_body.picture){
-            let types = {"i":".png","/":".jpg"};
-            let base64Data = obj_body.picture.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
-            let type = types[base64Data.charAt(0)];
-
-            if(type !== ".jpg" && type !== ".png"){
-                return res.status(400).json({msg:"Tipo de imagem inválido! (Deve ser .png ou .jpg)"});       
-            }
-
-            let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
-
-            try{
-                fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            try {
+                product.picture = uploadImgBase64(obj_body.picture)
             }
             catch(err){
-                console.log(err);
-                return res.status(400).json({msg:"Ocorreu um erro ao salvar a imagem!"});
+                return res.status(400).json({msg:err})
             }
-
-            product.picture = file_name;
         }
 
         product.active = 1;

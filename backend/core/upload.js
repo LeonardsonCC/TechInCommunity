@@ -1,31 +1,28 @@
-const multer = require('multer')
-
-const storage = multer.diskStorage({
- destination: function(req, file, callback) {
-     callback(null, "./public/images");
- },
- filename: function(req, file, callback) {
-     callback(null, Date.now() + "_" + file.originalname);
- }
-});
-
-const path = require('path');
+const  fs = require('fs');
 
 module.exports = app => {
 
-    const uploadImg = multer({
-        storage: storage,
-        fileFilter: function (req, file, callback, next) {
-            var ext = path.extname(file.originalname);
-            if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-                return callback(new Error('O arquivo não é uma imagem!'))
-            }
-            callback(null, true)
-        },
-        limits:{
-            fileSize: 1024 * 1024
-        }
-    })
+    function uploadImgBase64(img){
+        let types = {"i":".png","/":".jpg"};
+        let base64Data = img.replace(/^data:image\/png;base64,/, "").replace(/^data:image\/jpeg;base64,/, "");
+        let type = types[base64Data.charAt(0)];
 
-    return { uploadImg }
+        if(type !== ".jpg" && type !== ".png"){
+            throw "Tipo de imagem inválido! (Deve ser .png ou .jpg)";       
+        }
+
+        let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
+
+        try{
+            fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+        }
+        catch(err){
+            console.log(err);
+            throw "Ocorreu um erro ao salvar a imagem!";
+        }
+
+        return file_name;
+    }
+
+    return { uploadImgBase64 }
 }
