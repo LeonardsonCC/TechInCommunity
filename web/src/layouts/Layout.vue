@@ -17,6 +17,7 @@ import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import Footer from "./footer/Footer";
 import { mapState, mapMutations } from "vuex";
+import { isAuthorized } from "../providers/authorization";
 export default {
   name: "Layout",
 
@@ -35,6 +36,13 @@ export default {
   computed: {
     ...mapState(["Customizer_drawer"])
   },
+
+  created: function () {
+    if (!isAuthorized()) {
+      this.$router.push({ name: 'Login' });
+    }
+  },
+
 
   methods: {
     ...mapMutations({

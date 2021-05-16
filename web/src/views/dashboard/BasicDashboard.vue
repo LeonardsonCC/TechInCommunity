@@ -349,13 +349,6 @@ export default {
       return this.tasks.length - this.completedTasks;
     }
   },
-
-  created: function () {
-    if (!sessionStorage.getItem("auth_token")) {
-      this.$router.push({ name: 'Login' });
-    }
-  },
-
   methods: {
     create() {
       this.tasks.push({
