@@ -6,10 +6,6 @@
             <TableSimpleFixHeight></TableSimpleFixHeight>
         </BaseCard>
 
-        <BaseCard heading="Table Simple - Fixed header">
-            <TableSimpleFixHeader></TableSimpleFixHeader>
-        </BaseCard>
-
         <BaseCard heading="Table Simple - Dense table">
             <TableSimpleDense></TableSimpleDense>
         </BaseCard>
@@ -32,7 +28,6 @@ export default {
   }),
   components: {
       TableSimpleFixHeight: () => import('@/components/vuetifyComponents/tables-simple/TableSimpleFixHeight'),
-      TableSimpleFixHeader: () => import('@/components/vuetifyComponents/tables-simple/TableSimpleFixHeader'),
       TableSimpleDense: () => import('@/components/vuetifyComponents/tables-simple/TableSimpleDense'),
       TableSimpleDarktheme: () => import('@/components/vuetifyComponents/tables-simple/TableSimpleDarktheme')
   }

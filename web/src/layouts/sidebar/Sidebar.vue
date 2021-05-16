@@ -71,9 +71,9 @@ export default {
       },
 
       {
-        title: "Alerts",
-        icon: "mdi-alert",
-        to: "/pages/alerts"
+        title: "Produtos",
+        icon: "mdi-book",
+        to: "/pages/products"
       },
 
       {
