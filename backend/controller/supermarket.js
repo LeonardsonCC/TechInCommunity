@@ -49,6 +49,8 @@ module.exports = app => {
 		obj_to_insert.phone = obj_body.phone
 		obj_to_insert.cnpj = obj_body.cnpj
 		obj_to_insert.password = obj_body.password
+        obj_to_insert.cnae = obj_body.cnae
+        obj_to_insert.corporate_name = obj_body.corporate_name
 
         if(obj_body.logo){
             try {
@@ -103,7 +105,7 @@ module.exports = app => {
         /*Pra cada chave encontrada, ele verifica se há algo dentro da chave, 
         se existir, realiza a mudança no produto*/
         for (index in keys){
-            if(obj_body[keys[index]] && supermarket[keys[index]] && obj_body[keys[index]].toString().trim() !== ""){
+            if(obj_body[keys[index]] && (keys[index] in supermarket) && obj_body[keys[index]].toString().trim() !== ""){
                 supermarket[keys[index]] = obj_body[keys[index]]
             }
         }

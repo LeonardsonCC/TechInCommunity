@@ -4,9 +4,11 @@ option = input("Digite a opção: ")
 
 if(option == "create_supermarket"):
     mercado_exemplo = {
-    'name':'Mercado Dinossauro',
-    'cnpj':'21341253',
-    'email':'topper4@email.com',
+    'name':'Mercado Formal',
+    'cnpj':'235325235',
+    'cnae':'CNAE AQUI',
+    'corporate_name':'Mercado Merks LTDA',
+    'email':'mercado@email.com',
     'phone':'31221332',
     'password':'supersenha2',
     'password2':'supersenha2'
@@ -17,11 +19,11 @@ if(option == "create_supermarket"):
     print(r.text)
 elif(option == "update_supermarket"):
     headers = {
-    'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjExMzA2NTUsImlkIjo0fQ.ZROVpRRf6xC9leHneuNjsYwOd0DXUQDXD1DBdpoTHQc'
+    'Authorization':'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjEzODM3MTksImlkIjo1LCJ0eXBlIjoic3VwZXJtYXJrZXQifQ.-aghQrQIZfgR3Rr8xBURqt3TO7fvndj8KXuMi1QfvgE'
     }
 
     mercado_exemplo = {
-    'name':'iMercado Legalzao'
+    'corporate_name':'Mercado Merks LTDA',
     }
 
     r = requests.put("http://localhost:8081/supermarket", json=mercado_exemplo, headers=headers)
@@ -37,7 +39,7 @@ elif(option == "private_supermarket"):
     print(r.text)
 elif(option == "login_supermarket"):
     data = {
-    'email':'topper4@email.com',
+    'email':'mercado@email.com',
     'password':'supersenha2'
     }
     
@@ -137,7 +139,7 @@ elif(option == "update_customer"):
     }
 
     cliente_exemplo = {
-    'name':'Thiago Thiagos'
+    'name':'Thiago xD',
     }
 
     r = requests.put("http://localhost:8081/customer", json=cliente_exemplo, headers=headers)
