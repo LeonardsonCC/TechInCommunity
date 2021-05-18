@@ -95,7 +95,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="$emit('submit')"
+            @click="$emit('submit', product)"
           >
             Salvar
           </v-btn>
@@ -106,6 +106,7 @@
 </template>
 
 <script>
+
   export default {
     props: [
       "show"

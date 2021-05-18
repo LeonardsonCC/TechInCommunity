@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { toBase64 } from "../../providers/file";
+import api from "../../api";
 
 export default {
   name: "Produtos",
@@ -56,8 +58,28 @@ export default {
       showNewProductForm: function () {
           this.productFormActive = true;
       },
-      newProductSubmitHandler: function () {
-          console.log("TOP");
+      newProductSubmitHandler: async function (product) {
+          if (!product.name &&
+              !product.unit &&
+              !product.quantity &&
+              !product.category &&
+              !product.price &&
+              !product.picture) {
+            throw new Error("Erro ao validar atributos do produto");
+          }
+
+          const base64picture = await toBase64(product.picture);
+          api({
+            method: "POST",
+            url: "product",
+            data: JSON.stringify({
+                ...product,
+                picture: base64picture
+            })
+          })
+            .then((data) => console.log("SUCESSO", data))
+            .catch((err) => console.error(err))
+
       },
       productRowClick: function (name) {
           console.log("Click", name)
