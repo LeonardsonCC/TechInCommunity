@@ -63,29 +63,20 @@ export default {
         icon: "mdi-view-dashboard",
         to: "/dashboard/basic-dashboard"
       },
-
       {
         title: "Profile",
         icon: "mdi-account-circle",
         to: "/pages/profile"
       },
-
+      {
+        title: "Categorias",
+        icon: "mdi-label",
+        to: "/pages/categories"
+      },
       {
         title: "Produtos",
         icon: "mdi-book",
         to: "/pages/products"
-      },
-
-      {
-        title: "Icons",
-        icon: "mdi-emoticon",
-        to: "/pages/icons"
-      },
-
-      {
-        title: "Basic Table",
-        icon: "mdi-table-column-width",
-        to: "/pages/tables-simple"
       }
     ]
   }),

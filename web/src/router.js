@@ -25,6 +25,11 @@ export default new Router({
       children: [
         // Components
         {
+          name: 'Categorias',
+          path: 'pages/categories',
+          component: () => import('@/views/pages/Categoria'),
+        },
+        {
           name: 'Produtos',
           path: 'pages/products',
           component: () => import('@/views/pages/Produtos'),
@@ -34,24 +39,6 @@ export default new Router({
           name: 'Profile',
           path: 'pages/profile',
           component: () => import('@/views/pages/Profile'),
-        },
-
-        {
-          name: 'Icons',
-          path: 'pages/icons',
-          component: () => import('@/views/pages/Icons'),
-        },
-
-        {
-          name: 'TableSimple',
-          path: 'pages/tables-simple',
-          component: () => import('@/views/pages/TableSimple'),
-        },
-
-        {
-          name: 'Dashboard',
-          path: 'dashboard/basic-dashboard',
-          component: () => import('@/views/dashboard/BasicDashboard'),
         },
 
       ]
