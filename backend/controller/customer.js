@@ -18,22 +18,23 @@ module.exports = app => {
         try {
             existsOrError(obj_body.name,    'Nome não informado!')
             existsOrError(obj_body.email,   'E-mail não informado!')
+            existsOrError(obj_body.birth_date,   'Data de nascimento não informada!')
     		existsOrError(obj_body.phone, 'Telefone não informado!')
-    		existsOrError(obj_body.cnpj, 'CNPJ não informado!')
+    		existsOrError(obj_body.cpf, 'CPF não informado!')
             existsOrError(obj_body.password,     'Senha não informada!')
             existsOrError(obj_body.password2, 'Confirmação de senha não informada!')
             equalsOrError(obj_body.password, obj_body.password2,
                 'Senhas não conferem!')
 
-            let obj_bodyFromDB = await app.db('supermarket')
+            let obj_bodyFromDB = await app.db('customer')
                 .where({ email: obj_body.email }).first()
             notExistsOrError(obj_bodyFromDB, 'Email já cadastrado!')
 			
-            obj_bodyFromDB = await app.db('supermarket')
-                .where({ cnpj: obj_body.cnpj }).first()
-            notExistsOrError(obj_bodyFromDB, 'CNPJ já cadastrado!')
+            obj_bodyFromDB = await app.db('customer')
+                .where({ cpf: obj_body.cpf }).first()
+            notExistsOrError(obj_bodyFromDB, 'CPF já cadastrado!')
 			
-            obj_bodyFromDB = await app.db('supermarket')
+            obj_bodyFromDB = await app.db('customer')
                 .where({ phone: obj_body.phone }).first()
             notExistsOrError(obj_bodyFromDB, 'Telefone já cadastrado!')
         }
@@ -41,29 +42,33 @@ module.exports = app => {
             return res.status(400).json({msg:err})
         }
 
+        if(obj_body.birth_date.match(/^\d{4}-\d{2}-\d{2}$/) === null){
+            return res.status(400).json({msg:'Data de nascimento inválida! Deve estar no formato YYYY-MM-DD'})
+        }
+
         obj_body.password = encryptPassword(obj_body.password)
 
 		obj_to_insert = {}
 		obj_to_insert.name = obj_body.name
+        obj_to_insert.birth_date = obj_body.birth_date
 		obj_to_insert.email = obj_body.email
 		obj_to_insert.phone = obj_body.phone
-		obj_to_insert.cnpj = obj_body.cnpj
+		obj_to_insert.cpf = obj_body.cpf
 		obj_to_insert.password = obj_body.password
-        obj_to_insert.cnae = obj_body.cnae
-        obj_to_insert.corporate_name = obj_body.corporate_name
 
-        if(obj_body.logo){
+         
+        if(obj_body.picture){
             try {
-                obj_to_insert.logo = uploadImgBase64(obj_body.logo)
+                obj_to_insert.picture = uploadImgBase64(obj_body.picture)
             }
             catch(err){
                 return res.status(400).json({msg:err})
             }
         }
 
-        app.db('supermarket')
+        app.db('customer')
         	.insert(obj_to_insert)
-        	.then(() => res.json({msg:"Mercado "+obj_to_insert.name+" cadastrado com sucesso!"}))
+        	.then(() => res.json({msg:"Cliente "+obj_to_insert.name+" cadastrado com sucesso!"}))
         	.catch(
                 function(err) {
                     res.status(400).json({msg:err})
@@ -73,22 +78,26 @@ module.exports = app => {
     }
 
     const update = async(req, res) => {
-    	let supermarket_id = req.payload.id;
+    	let customer_id = req.payload.id;
     	let obj_body = { ...req.body };
 
-        if(obj_body.cnpj){
-            return res.status(400).json({msg:"Não é possível editar o CNPJ!"});
+        if(obj_body.cpf){
+            return res.status(400).json({msg:"Não é possível editar o CPF!"});
+        }
+
+        if(obj_body.birth_date && obj_body.birth_date.match(/^\d{4}-\d{2}-\d{2}$/) === null){
+            return res.status(400).json({msg:'Data de nascimento inválida! Deve estar no formato YYYY-MM-DD'})
         }
 
         try {
             if(obj_body.email){
-                let obj_bodyFromDB = await app.db('supermarket')
+                let obj_bodyFromDB = await app.db('customer')
                     .where({ email: obj_body.email }).first()
                 notExistsOrError(obj_bodyFromDB, 'Email já cadastrado!')
             }
 
             if(obj_body.phone){
-                obj_bodyFromDB = await app.db('supermarket')
+                obj_bodyFromDB = await app.db('customer')
                     .where({ phone: obj_body.phone }).first()
                 notExistsOrError(obj_bodyFromDB, 'Telefone já cadastrado!')
             }
@@ -97,16 +106,16 @@ module.exports = app => {
             return res.status(400).json({msg:err})
         }
 
-        let supermarket = await app.db('supermarket')
-            .where({ id: supermarket_id }).first()
+        let customer = await app.db('customer')
+            .where({ id: customer_id }).first()
 
         keys = Object.keys(obj_body)
  
         /*Pra cada chave encontrada, ele verifica se há algo dentro da chave, 
         se existir, realiza a mudança no produto*/
         for (index in keys){
-            if(obj_body[keys[index]] && (keys[index] in supermarket) && obj_body[keys[index]].toString().trim() !== ""){
-                supermarket[keys[index]] = obj_body[keys[index]]
+            if(obj_body[keys[index]] && customer[keys[index]] && obj_body[keys[index]].toString().trim() !== ""){
+                customer[keys[index]] = obj_body[keys[index]]
             }
         }
 
@@ -115,66 +124,45 @@ module.exports = app => {
         		return res.status(400).json({msg:"As senhas não conferem!"});
         	}
         	else{
-        		supermarket.password = encryptPassword(obj_body.password);
+        		customer.password = encryptPassword(obj_body.password);
         	}
         }
 
-        if(obj_body.logo){
+        if(obj_body.picture){
             try {
-                supermarket.logo = uploadImgBase64(obj_body.logo)
+                customer.picture = uploadImgBase64(obj_body.picture)
             }
             catch(err){
                 return res.status(400).json({msg:err})
             }
         }
 
-        app.db('supermarket')
-            .where({id: supermarket_id})
-            .update(supermarket)
-            .then(() => res.json({msg:"Mercado "+supermarket.name+" atualizado com sucesso!"}))
+        if(obj_body.birth_date && obj_body.birth_date.match(/^\d{4}-\d{2}-\d{2}$/) === null){
+            return res.status(400).json({msg:'Data de nascimento inválida! Deve estar no formato YYYY-MM-DD'})
+        }
+
+        app.db('customer')
+            .where({id: customer_id})
+            .update(customer)
+            .then(() => res.json({msg:"Cliente "+customer.name+" atualizado com sucesso!"}))
             .catch(
                 function(err){
                 	console.log(err)
-                    res.status(400).json({msg:"Ocorreu um erro ao atualizar o supermercado!"})
+                    res.status(400).json({msg:"Ocorreu um erro ao atualizar o cliente!"})
                 }
             )        
     }
 	
     const private = async(req, res) => {
-        let supermarket_id = req.payload.id;
+        let customer_id = req.payload.id;
 
-        let result = await app.db('supermarket')
-           .select(['name','email', 'cnpj','phone','logo'])
-           .where({ id: supermarket_id }).first()
+        let result = await app.db('customer')
+           .select(['name','email', 'birth_date', 'cpf','phone','picture'])
+           .where({ id: customer_id }).first()
 
         return res.json(result);
     }
 
-    const list = async(req, res) => {
-        if(req.query.supermarket_id && req.query.supermarket_id !== ""){
-            let result = await app.db('supermarket')
-               .select(['name','cnpj','phone','logo'])
-               .where({ id: req.query.supermarket_id }).first()
-               
-            if(result){
-                return res.json(result);
-            }
-            else{
-                return res.json({msg: "Este supermercado não existe!"});
-            }
-        }
-        else{
-            let result = await app.db('supermarket')
-               .select(['name','cnpj','phone','logo'])
-            if(result){
-                return res.json(result);
-            }
-            else{
-                return res.json({msg: "Não há supermercados cadastrados!"});
-            }
-        }
-    }
-
 	//Retorna os métodos
-	return { create, update, list, private}
+	return { create, update, private}
 }

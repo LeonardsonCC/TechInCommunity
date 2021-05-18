@@ -11,7 +11,7 @@ module.exports = app =>{
         .get(controller.product.list)
 
     app.route('/product')
-        .all(auth.requireToken)
+        .all(auth.requireToken("supermarket"))
         .post(controller.product.create)
         .put(controller.product.update)
 
@@ -19,23 +19,33 @@ module.exports = app =>{
 	    .post(auth.login_supermarket)
 
 	app.route('/test/token')
-	    .all(auth.requireToken)
+	    .all(auth.requireToken("supermarket"))
 		.get(function(req, res){
 			let id = req.payload.id;
 			return res.json({status: "Logado através do id: "+id});
 		})
 
     app.route('/supermarket/private')
-    	.get(auth.requireToken, controller.supermarket.private)
+    	.get(auth.requireToken("supermarket"), controller.supermarket.private)
 
 	app.route('/supermarket')
 		.get(controller.supermarket.list)
 		.post(controller.supermarket.create)
-		.put(auth.requireToken, controller.supermarket.update)
+		.put(auth.requireToken("supermarket"), controller.supermarket.update)
 
     app.route('/category')
         .get(controller.category.list)
-        .post(auth.requireToken, controller.category.create)
-        .put(auth.requireToken, controller.category.update)
+        .post(auth.requireToken("supermarket"), controller.category.create)
+        .put(auth.requireToken("supermarket"), controller.category.update)
+
+	app.route('/customer')
+		.post(controller.customer.create)
+		.put(auth.requireToken("customer"), controller.customer.update)
+
+    app.route('/customer/private')
+    	.get(auth.requireToken("customer"), controller.customer.private)
+
+    app.route('/customer/login')
+	    .post(auth.login_customer)
 
 }
