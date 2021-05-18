@@ -14,6 +14,7 @@
         </v-col>
         <product-form 
           :show="productFormActive"
+          :categories="categories"
           @close="productFormActive = !productFormActive"
           @submit="newProductSubmitHandler"
           ></product-form>
@@ -48,13 +49,39 @@ export default {
         unit: "Kg",
         price: 100
       }
-    ]
+    ],
+    categories: [],
   }),
   components: {
       "products-table": () => import('@/components/admin/products/ProductsTable'),
       "product-form": () => import('@/components/admin/products/Form'),
   },
+  created: function () {
+      this.fetchCategories();
+      this.fetchProducts();
+  },
   methods: {
+      fetchCategories: function () {
+          api({
+              method: "GET",
+              url: "category?supermarket_id=1",
+          })
+            .then(({ data }) => {
+              this.categories = data;
+            })
+            .catch((err) => console.error(err))
+      },
+      fetchProducts: function () {
+          api({
+              method: "GET",
+              url: "product/search?supermarket_id=1",
+          })
+            .then(({ data }) => {
+              console.log(data);
+              this.products = data;
+            })
+            .catch((err) => console.error(err))
+      },
       showNewProductForm: function () {
           this.productFormActive = true;
       },
@@ -77,7 +104,10 @@ export default {
                 picture: base64picture
             })
           })
-            .then((data) => console.log("SUCESSO", data))
+            .then((data) => {
+              this.productFormActive = false;
+              console.log(data);
+            })
             .catch((err) => console.error(err))
 
       },

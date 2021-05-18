@@ -47,10 +47,7 @@
               </v-col>
               <v-col cols="12">
                 <v-select
-                  :items="[{
-                      id: 1,
-                      name: 'Comida'
-                    }]"
+                  :items="categories"
                   label="Categoria*"
                   v-model="product.category"
                   item-text="name"
@@ -109,6 +106,7 @@
 
   export default {
     props: [
+      "categories",
       "show"
     ],
     data: function () {
