@@ -20,7 +20,7 @@ export default new Router({
     {
       name: "dashboard",
       path: '/',
-      redirect: 'dashboard/basic-dashboard',
+      redirect: 'pages/profile',
       component: () => import('@/layouts/Layout'),
       children: [
         // Components

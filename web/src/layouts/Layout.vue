@@ -18,6 +18,8 @@ import Sidebar from "./sidebar/Sidebar";
 import Footer from "./footer/Footer";
 import { mapState, mapMutations } from "vuex";
 import { isAuthorized } from "../providers/authorization";
+import api from "../api";
+
 export default {
   name: "Layout",
 
@@ -40,7 +42,18 @@ export default {
   created: function () {
     if (!isAuthorized()) {
       this.$router.push({ name: 'Login' });
+      return;
     }
+    api({
+      method: "GET",
+      url: "supermarket/private"
+    })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
   },
 
 

@@ -59,12 +59,7 @@ export default {
   data: () => ({
     items: [
       {
-        title: "Dashboard",
-        icon: "mdi-view-dashboard",
-        to: "/dashboard/basic-dashboard"
-      },
-      {
-        title: "Profile",
+        title: "Perfil",
         icon: "mdi-account-circle",
         to: "/pages/profile"
       },
