@@ -14,6 +14,13 @@ module.exports = app => {
             existsOrError(obj_body.quantity,   'Quantidade em estoque não informada!')
     		existsOrError(obj_body.price, 'Preço não informado!')
             existsOrError(obj_body.category,     'Categoria não informada!')
+
+            let category = await app.db('category')
+                .where({ id: obj_body.category, supermarket_id: supermarket_id, active: 1 })
+                .orWhere({id: obj_body.category, supermarket_id: null, active: 1})
+                .first()
+
+            existsOrError(category, 'A categoria selecionada não existe!')
         }
     	catch(err) {
             return res.status(400).json({msg:err})
