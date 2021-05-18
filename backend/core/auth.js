@@ -71,7 +71,7 @@ module.exports = app =>
                             return res.status(401).json({msg:"Tipo do token inválido! Deveria ser "+type})   
                         }
 
-                        req.payload = jwt.decode(token, authSecret)
+                        req.payload = payload
                         
                         next();
                     }
@@ -80,7 +80,12 @@ module.exports = app =>
                     }
                 } catch(e) {
                     console.log(e)
-                    return res.status(401).json({msg:"Token inválido!"})
+                    if(e.toString().includes("Token expired")){
+                        return res.status(401).json({msg:"Token expirado!"})
+                    }
+                    else{
+                        return res.status(401).json({msg:"Token inválido!"})    
+                    }
                 }
             }
     }

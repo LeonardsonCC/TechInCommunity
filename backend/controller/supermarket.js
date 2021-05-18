@@ -74,6 +74,27 @@ module.exports = app => {
     	let supermarket_id = req.payload.id;
     	let obj_body = { ...req.body };
 
+        if(obj_body.cnpj){
+            return res.status(400).json({msg:"Não é possível editar o CNPJ!"});
+        }
+
+        try {
+            if(obj_body.email){
+                let obj_bodyFromDB = await app.db('supermarket')
+                    .where({ email: obj_body.email }).first()
+                notExistsOrError(obj_bodyFromDB, 'Email já cadastrado!')
+            }
+
+            if(obj_body.phone){
+                obj_bodyFromDB = await app.db('supermarket')
+                    .where({ phone: obj_body.phone }).first()
+                notExistsOrError(obj_bodyFromDB, 'Telefone já cadastrado!')
+            }
+        }
+        catch(err){
+            return res.status(400).json({msg:err})
+        }
+
         let supermarket = await app.db('supermarket')
             .where({ id: supermarket_id }).first()
 

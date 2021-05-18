@@ -81,6 +81,31 @@ module.exports = app => {
     	let customer_id = req.payload.id;
     	let obj_body = { ...req.body };
 
+        if(obj_body.cpf){
+            return res.status(400).json({msg:"Não é possível editar o CPF!"});
+        }
+
+        if(obj_body.birth_date && obj_body.birth_date.match(/^\d{4}-\d{2}-\d{2}$/) === null){
+            return res.status(400).json({msg:'Data de nascimento inválida! Deve estar no formato YYYY-MM-DD'})
+        }
+
+        try {
+            if(obj_body.email){
+                let obj_bodyFromDB = await app.db('customer')
+                    .where({ email: obj_body.email }).first()
+                notExistsOrError(obj_bodyFromDB, 'Email já cadastrado!')
+            }
+
+            if(obj_body.phone){
+                obj_bodyFromDB = await app.db('customer')
+                    .where({ phone: obj_body.phone }).first()
+                notExistsOrError(obj_bodyFromDB, 'Telefone já cadastrado!')
+            }
+        }
+        catch(err){
+            return res.status(400).json({msg:err})
+        }
+
         let customer = await app.db('customer')
             .where({ id: customer_id }).first()
 
