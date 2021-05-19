@@ -1,9 +1,11 @@
 import axios from 'axios';
 import authorizationToken from "../providers/authorization";
 
+const BASE_URL = "http://localhost:8081/";
+
 // Logged Users
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8081/",
+  baseURL: BASE_URL,
   timeout: 1000,
   responseType: 'json',
   headers: {
@@ -14,7 +16,7 @@ const axiosInstance = axios.create({
 
 // Not Logged Users (Used in first Sign In or Login)
 const axiosNotLoggedInstance = axios.create({
-  baseURL: "http://localhost:8081/",
+  baseURL: BASE_URL,
   timeout: 1000,
   responseType: 'json',
   headers: {
@@ -22,5 +24,5 @@ const axiosNotLoggedInstance = axios.create({
   }
 })
 
-export { axiosNotLoggedInstance };
+export { axiosNotLoggedInstance, BASE_URL };
 export default axiosInstance;

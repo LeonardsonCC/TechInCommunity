@@ -57,7 +57,7 @@
 
 <script>
 import * as supermarketProvider from "../../providers/api/supermarket"
-import { BASE_URL } from "../../api";
+import { getImageUrl } from "../../providers/file";
 
 export default {
   name: "Profile",
@@ -82,7 +82,7 @@ export default {
           console.log("DATA", data);
           this.supermarket = {
             ...data,
-            logo: `${BASE_URL}public/images/${data.logo}`
+            logo: getImageUrl(data.logo)
           };
         })
         .catch((err) => console.error(err));
