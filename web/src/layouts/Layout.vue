@@ -14,8 +14,8 @@
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import { mapState, mapMutations } from "vuex";
-import { isAuthorized } from "../providers/authorization";
-import api from "../api";
+import { isAuthorized, getInfo } from "../providers/authorization";
+import * as supermarketData from "../providers/supermarketData";
 
 export default {
   name: "Layout",
@@ -40,16 +40,8 @@ export default {
       this.$router.push({ name: 'Login' });
       return;
     }
-    api({
-      method: "GET",
-      url: "supermarket/private"
-    })
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+
+    supermarketData.setData(getInfo())
   },
 
 

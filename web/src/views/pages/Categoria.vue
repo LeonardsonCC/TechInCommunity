@@ -33,6 +33,7 @@
 
 <script>
 import { fetchCategories, addCategory } from "../../providers/api/categories";
+import * as authorization from "../../providers/authorization";
 
 export default {
   name: "Categoria",
@@ -59,8 +60,7 @@ export default {
   },
   methods: {
       fetchCategoriesList: function () {
-          const supermarketId = 1;
-          fetchCategories(supermarketId)
+          fetchCategories(authorization.getInfo().id)
             .then(({ data }) => {
               this.categories = data;
             })

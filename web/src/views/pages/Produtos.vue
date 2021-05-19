@@ -36,6 +36,7 @@
 import { toBase64 } from "../../providers/file";
 import { fetchProducts, addProduct } from "../../providers/api/products";
 import { fetchCategories } from "../../providers/api/categories";
+import * as authorization from "../../providers/authorization";
 
 export default {
   name: "Produtos",
@@ -64,16 +65,14 @@ export default {
   },
   methods: {
       fetchCategories: function () {
-        const supermarketId = 1;
-        fetchCategories(supermarketId)
+        fetchCategories(authorization.getInfo().id)
             .then(({ data }) => {
               this.categories = data;
             })
             .catch((err) => console.error(err))
       },
       fetchProducts: function () {
-        const supermarketId = 1;
-        fetchProducts(supermarketId)
+        fetchProducts(authorization.getInfo().id)
           .then(({ data }) => {
             console.log(data);
             this.products = data;
