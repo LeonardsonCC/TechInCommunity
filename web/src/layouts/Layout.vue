@@ -7,15 +7,12 @@
         <router-view />
       </v-container>
     </v-content>
-
-    <Footer></Footer>
   </v-app>
 </template>
 
 <script>
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
-import Footer from "./footer/Footer";
 import { mapState, mapMutations } from "vuex";
 import { isAuthorized } from "../providers/authorization";
 import api from "../api";
@@ -26,7 +23,6 @@ export default {
   components: {
     Header,
     Sidebar,
-    Footer
   },
 
   props: {
