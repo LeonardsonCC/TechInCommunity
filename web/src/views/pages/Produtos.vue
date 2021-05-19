@@ -34,24 +34,26 @@
 
 <script>
 import { toBase64 } from "../../providers/file";
-import api from "../../api";
+import { fetchProducts, addProduct } from "../../providers/api/products";
+import { fetchCategories } from "../../providers/api/categories";
 
 export default {
   name: "Produtos",
 
   data: () => ({
     productFormActive: false,
-    products: [
-      {
-        id: 1,
-        name: "Teste",
-        quantity: "100",
-        unit: "Kg",
-        price: 100
-      }
-    ],
+    products: [],
     categories: [],
+    needUpdate: false,
   }),
+  watch: {
+      needUpdate: function (value) {
+          if (value === true) {
+              this.fetchProducts()
+              this.needUpdate = false;
+          }
+      }
+  },
   components: {
       "products-table": () => import('@/components/admin/products/ProductsTable'),
       "product-form": () => import('@/components/admin/products/Form'),
@@ -62,25 +64,21 @@ export default {
   },
   methods: {
       fetchCategories: function () {
-          api({
-              method: "GET",
-              url: "category?supermarket_id=1",
-          })
+        const supermarketId = 1;
+        fetchCategories(supermarketId)
             .then(({ data }) => {
               this.categories = data;
             })
             .catch((err) => console.error(err))
       },
       fetchProducts: function () {
-          api({
-              method: "GET",
-              url: "product/search?supermarket_id=1",
+        const supermarketId = 1;
+        fetchProducts(supermarketId)
+          .then(({ data }) => {
+            console.log(data);
+            this.products = data;
           })
-            .then(({ data }) => {
-              console.log(data);
-              this.products = data;
-            })
-            .catch((err) => console.error(err))
+          .catch((err) => console.error(err))
       },
       showNewProductForm: function () {
           this.productFormActive = true;
@@ -96,17 +94,14 @@ export default {
           }
 
           const base64picture = await toBase64(product.picture);
-          api({
-            method: "POST",
-            url: "product",
-            data: JSON.stringify({
+          addProduct({
                 ...product,
                 picture: base64picture
             })
-          })
             .then((data) => {
               this.productFormActive = false;
               console.log(data);
+              this.needUpdate = true;
             })
             .catch((err) => console.error(err))
 

@@ -32,21 +32,24 @@
 </template>
 
 <script>
-import api from "../../api";
+import { fetchCategories, addCategory } from "../../providers/api/categories";
 
 export default {
   name: "Categoria",
 
   data: () => ({
     categoryFormActive: false,
-    categories: [
-      {
-        id: 1,
-        name: "Teste",
-        description: "Teste",
-      }
-    ]
+    categories: [],
+    needUpdate: false,
   }),
+  watch: {
+      needUpdate: function (value) {
+          if (value === true) {
+              this.fetchCategories()
+              this.needUpdate = false;
+          }
+      }
+  },
   components: {
       "categories-table": () => import('@/components/admin/categories/CategoriesTable'),
       "category-form": () => import('@/components/admin/categories/Form'),
@@ -56,10 +59,8 @@ export default {
   },
   methods: {
       fetchCategoriesList: function () {
-          api({
-            method: "GET",
-            url: "category?supermarket_id=1",
-          })
+          const supermarketId = 1;
+          fetchCategories(supermarketId)
             .then(({ data }) => {
               this.categories = data;
             })
@@ -74,14 +75,14 @@ export default {
             throw new Error("Erro ao validar atributos da categoria");
           }
 
-          api({
-            method: "POST",
-            url: "category",
-            data: JSON.stringify({
-                ...category
-            })
+         addCategory({
+            ...category
           })
-            .then((data) => console.log("SUCESSO", data))
+            .then((data) => {
+              this.productFormActive = false;
+              console.log(data);
+              this.needUpdate = true;
+            })
             .catch((err) => console.error(err))
 
       },
