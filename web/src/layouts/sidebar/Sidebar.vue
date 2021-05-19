@@ -15,12 +15,12 @@
       <!---USer Area -->
       <v-list-item two-line class="px-0">
         <v-list-item-avatar>
-          <img src="https://randomuser.me/api/portraits/men/81.jpg" />
+          <img :src="supermarket.logo" />
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>Dohn Deo</v-list-item-title>
-          <v-list-item-subtitle class="caption">Webdesigner</v-list-item-subtitle>
+          <v-list-item-title>{{supermarket.name}}</v-list-item-title>
+          <v-list-item-subtitle class="caption">{{supermarket.cnpj}}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <!---USer Area -->
@@ -47,6 +47,8 @@
 
 <script>
 import { mapState } from "vuex";
+import * as supermarketProvider from "../../providers/api/supermarket";
+import { getImageUrl } from "../../providers/file";
 
 export default {
   name: "Sidebar",
@@ -56,7 +58,27 @@ export default {
       default: false
     }
   },
+  created: function () {
+    this.fetchSupermarketInfo();
+  },
+  methods: {
+    fetchSupermarketInfo: function () {
+      supermarketProvider.fetchPrivate()
+        .then(({ data }) => {
+          console.log("DATA", data);
+          this.supermarket = {
+            ...data,
+            logo: getImageUrl(data.logo)
+          };
+        })
+        .catch((err) => console.error(err));
+    }
+  },
   data: () => ({
+    supermarket: {
+      name: "",
+      logo: ""
+    },
     items: [
       {
         title: "Perfil",
@@ -91,8 +113,6 @@ export default {
       this.$emit("update:expandOnHover", !val);
     }
   },
-
-  methods: {}
 };
 </script>
 <style lang="scss">
