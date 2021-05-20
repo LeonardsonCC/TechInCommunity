@@ -18,7 +18,7 @@ export const getAuthToken = () => {
   if (window.sessionStorage.getItem("auth_token")) {
     return window.sessionStorage.getItem("auth_token");
   }
-  throw new Error("Nao esta logado para isso");
+  return false;
 }
 
 export const getInfo = () => {
