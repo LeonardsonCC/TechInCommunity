@@ -46,7 +46,7 @@ export default {
   watch: {
       needUpdate: function (value) {
           if (value === true) {
-              this.fetchCategories()
+              this.fetchCategoriesList()
               this.needUpdate = false;
           }
       }
@@ -79,7 +79,7 @@ export default {
             ...category
           })
             .then((data) => {
-              this.productFormActive = false;
+              this.categoryFormActive = false;
               console.log(data);
               this.needUpdate = true;
             })
