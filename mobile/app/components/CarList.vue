@@ -1,10 +1,10 @@
 <template>
     <Page>
         <ActionBar>
-            <Label horizontalAlignment="center" text="Car List"/>
-        </ActionBar>
+            <Label horizontalAlignment="center" text="Lista de produtos"/>
+        </ActionBar>   
 
-        <RadListView @itemTap="onItemTap" class="cars-list" for="item in cars" v-if="!isLoading">
+        <RadListView @itemTap="onItemTap" class="cars-list" for="item in products" v-if="!isLoading">
             <ListViewLinearLayout scrollDirection="Vertical" v-tkListViewLayout/>
             <v-template>
                 <StackLayout class="cars-list__item">
@@ -20,27 +20,27 @@
 
                         <Label class="hr m-y-5" colSpan="2" row="1"/>
 
-                        <Image :src="item.imageUrl" class="m-r-20" height="120" loadMode="async" row="2"
+                        <Image :src="url+'/'+item.picture" class="m-r-20" height="120" loadMode="async" row="2"
                                stretch="aspectFill"/>
 
                         <StackLayout col="1" row="2" verticalAlignment="center">
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span class="fas cars-list__item-icon" text.decode="&#xf1b9;    "></Span>
-                                    <Span :text="item.class"/>
+                                    <Span :text="item.quantity"/>
                                 </FormattedString>
                             </Label>
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span class="fas cars-list__item-icon" text.decode="&#xf085;   "/>
-                                    <Span :text="item.transmission"/>
+                                    <Span :text="item.quantity"/>
                                     <Span text=" Transmission"/>
                                 </FormattedString>
                             </Label>
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
                                     <Span class="fas cars-list__item-icon" text.decode="&#xf2dc;    "/>
-                                    <Span :text="item.hasAC ? 'Yes' : 'No'"/>
+                                    <Span :text="item.category_id ? 'Yes' : 'No'"/>
                                 </FormattedString>
                             </Label>
                         </StackLayout>
@@ -54,15 +54,33 @@
 
 <script>
   import CarDetails from "./CarDetails";
+  import db from "~/car-rental-export-public.json"
+  import config from "~/config.json"
+  import axios from 'axios';
 
   export default {
-    props: {
-      cars: Array
+    
+    data: () => {
+        return {
+            url: config.url,
+            products: []
+        }
+    },
+
+    mounted () {
+        let url = this.url+'/product/search?supermarket_id=3';
+        axios.get(url)
+            .then(data => {
+                this.products = data["data"];
+            })
+            .catch((err) => {
+                console.log(err)
+            });
     },
 
     computed: {
       isLoading() {
-        return !this.cars.length;
+        return !this.products.length;
       }
     },
 
