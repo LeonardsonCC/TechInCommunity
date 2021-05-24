@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { toBase64 } from "../../providers/file";
+import { toBase64, getImageUrl } from "../../providers/file";
 import { fetchProducts, addProduct } from "../../providers/api/products";
 import { fetchCategories } from "../../providers/api/categories";
 import * as authorization from "../../providers/authorization";
@@ -74,7 +74,10 @@ export default {
       fetchProducts: function () {
         fetchProducts(authorization.getInfo().id)
           .then(({ data }) => {
-            console.log(data);
+            data = data.map((item) => {
+                item.picture = getImageUrl(item.picture);
+                return item;
+            })
             this.products = data;
           })
           .catch((err) => console.error(err))

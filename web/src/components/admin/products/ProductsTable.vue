@@ -11,6 +11,7 @@
                 <template v-slot:default>
                 <thead>
                     <tr>
+                      <th class="text-left" style="width: 100px">Imagem</th>
                       <th class="text-left">Nome</th>
                       <th class="text-left">Quatidade</th>
                       <th class="text-left">Preco</th>
@@ -18,6 +19,14 @@
                 </thead>
                 <tbody>
                     <tr v-for="item in productsList" :key="item.name" @click="$emit('edit', item.id)">
+                      <td>
+                        <v-img  
+                          :src="item.picture" 
+                          :lazy-src="item.picture" 
+                          :alt="item.name"
+                          max-width="100"
+                          max-height="100"></v-img>
+                      </td>
                       <td>{{ item.name }}</td>
                       <td>{{ item.quantity }} {{item.unit}}</td>
                       <td>{{ item.price }}</td>
