@@ -22,16 +22,17 @@
       </template>
 
       <v-list>
-        <v-list-item v-for="(item, i) in userprofile" :key="i" @click="href">
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        <v-list-item @click="logout">
+          <v-list-item-title>Logout</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
   </v-app-bar>
 </template>
 <script>
-// Utilities
 import { mapState, mapMutations } from "vuex";
+import { logout as logoutAuth } from "../../providers/authorization";
+
 export default {
   name: "Header",
 
@@ -44,16 +45,6 @@ export default {
     }
   },
   data: () => ({
-    userprofile: [
-      { title: "My Profile" },
-      { title: "My Balance" },
-      { title: "Inbox" },
-      { title: "Account Setting" },
-      { title: "Logout" }
-    ],
-    href() {
-      return undefined;
-    }
   }),
 
   computed: {
@@ -63,7 +54,10 @@ export default {
   methods: {
     ...mapMutations({
       setSidebarDrawer: "SET_SIDEBAR_DRAWER"
-    })
+    }),
+    logout: function () {
+      logoutAuth();
+    }
   }
 };
 </script>

@@ -21,6 +21,13 @@ export const getAuthToken = () => {
   return false;
 }
 
+export const logout = () => {
+  if (isAuthorized) {
+    window.sessionStorage.removeItem("auth_token");
+    document.location.reload(true);
+  }
+}
+
 export const getInfo = () => {
   if (isAuthorized) {
     return JSON.parse(atob(getAuthToken().split(".")[1]));

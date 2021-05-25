@@ -121,6 +121,7 @@ export default {
               self.snackbar.color = "green";
 
               self.$router.push({ name: 'dashboard' });
+              document.location.reload(true);
             })
             .catch((err) => {
               if (err.response) {
