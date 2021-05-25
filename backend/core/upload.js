@@ -11,10 +11,10 @@ module.exports = app => {
             throw "Tipo de imagem inválido! (Deve ser .png ou .jpg)";       
         }
 
-        let file_name = process.env.IMAGES_PATH+Date.now()+Math.random().toString(36).substring(7)+type;
+        let file_name = Date.now()+Math.random().toString(36).substring(7)+type;
 
         try{
-            fs.writeFileSync(__dirname+"/../"+file_name, base64Data, 'base64');
+            fs.writeFileSync(__dirname+"/../"+process.env.IMAGES_PATH+file_name, base64Data, 'base64');
         }
         catch(err){
             console.log(err);

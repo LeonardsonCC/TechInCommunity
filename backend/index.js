@@ -11,7 +11,6 @@ const bodyParser = require("body-parser");
 
 
 app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
 app.use("/public/images/",express.static(path.join(__dirname, 'public', 'images')))
 app.db = db;
 
