@@ -32,12 +32,14 @@
             <v-text-field
               v-model="supermarket.cnpj"
               label="CNPJ"
+              disabled
               filled
               background-color="transparent"
             ></v-text-field>
             <v-text-field
               v-model="supermarket.email"
               label="E-mail"
+              disabled
               filled
               background-color="transparent"
             ></v-text-field>
@@ -47,7 +49,10 @@
               filled
               background-color="transparent"
             ></v-text-field>
-            <v-btn class="text-capitalize mt-5 element-0" color="success">Salvar Alteracoes</v-btn>
+            <v-btn
+              @click="updateSupermarket"
+              class="text-capitalize mt-5 element-0" 
+              color="success">Salvar Alteracoes</v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -79,13 +84,30 @@ export default {
     fetchSupermarketInfo: function () {
       supermarketProvider.fetchPrivate()
         .then(({ data }) => {
-          console.log("DATA", data);
           this.supermarket = {
             ...data,
+            originalLogo: data.logo,
             logo: getImageUrl(data.logo)
           };
         })
         .catch((err) => console.error(err));
+    },
+    updateSupermarket: function () {
+      let cloneSupermarket = { 
+        ...this.supermarket,
+        logo: this.supermarket.originalLogo 
+      };
+      delete cloneSupermarket.cnpj;
+      delete cloneSupermarket.email;
+      delete cloneSupermarket.originalLogo;
+      delete cloneSupermarket.logo; // TODO: REMOVE THIS LATER
+      supermarketProvider.update({
+        ...cloneSupermarket
+      })
+        .then((data) => {
+          console.log(data)
+        })
+        .catch((err) => console.log(err))
     }
   }
 };

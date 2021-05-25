@@ -6,3 +6,11 @@ export const fetchPrivate = () => {
     url: "supermarket/private"
   })
 }
+
+export const update = (data) => {
+  return api({
+    method: "PUT",
+    url: "supermarket",
+    data: JSON.stringify(data)
+  })
+}
