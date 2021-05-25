@@ -23,6 +23,12 @@
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
+            <v-file-input
+              v-model="updatedLogo"
+              label="Logo"
+              filled
+              background-color="transparent"
+            ></v-file-input>
             <v-text-field
               v-model="supermarket.name"
               label="Nome"
@@ -62,7 +68,7 @@
 
 <script>
 import * as supermarketProvider from "../../providers/api/supermarket"
-import { getImageUrl } from "../../providers/file";
+import { getImageUrl, toBase64 } from "../../providers/file";
 
 export default {
   name: "Profile",
@@ -74,7 +80,8 @@ export default {
       email: "",
       name: "",
       phone: "",
-    }
+    },
+    updatedLogo: null
   }),
   components: {},
   created: function () {
@@ -92,7 +99,7 @@ export default {
         })
         .catch((err) => console.error(err));
     },
-    updateSupermarket: function () {
+    updateSupermarket: async function () {
       let cloneSupermarket = { 
         ...this.supermarket,
         logo: this.supermarket.originalLogo 
@@ -101,7 +108,11 @@ export default {
       delete cloneSupermarket.email;
       delete cloneSupermarket.phone;
       delete cloneSupermarket.originalLogo;
-      delete cloneSupermarket.logo; // TODO: REMOVE THIS LATER
+      try {
+          cloneSupermarket.logo = await toBase64(this.updatedLogo);
+      } catch (err) {
+          delete cloneSupermarket.logo;
+      }
       supermarketProvider.update({
         ...cloneSupermarket
       })
