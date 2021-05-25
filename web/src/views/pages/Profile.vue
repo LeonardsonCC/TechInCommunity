@@ -99,6 +99,7 @@ export default {
       };
       delete cloneSupermarket.cnpj;
       delete cloneSupermarket.email;
+      delete cloneSupermarket.phone;
       delete cloneSupermarket.originalLogo;
       delete cloneSupermarket.logo; // TODO: REMOVE THIS LATER
       supermarketProvider.update({
@@ -106,6 +107,7 @@ export default {
       })
         .then((data) => {
           console.log(data)
+          this.fetchSupermarketInfo()
         })
         .catch((err) => console.log(err))
     }
