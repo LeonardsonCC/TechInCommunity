@@ -12,35 +12,22 @@
                         <Label :text="item.name" class="cars-list__item-name font-weight-bold"/>
                         <Label class="m-r-5" col="1" horizontalAlignment="right">
                             <FormattedString>
-                                <Span text.decode="&euro;"/>
+                                <Span text="R$"/>
                                 <Span :text="item.price"/>
-                                <Span text="/day"/>
+                                <Span :text="'/'+item.unit"/>
                             </FormattedString>
                         </Label>
 
                         <Label class="hr m-y-5" colSpan="2" row="1"/>
 
-                        <Image :src="url+'/'+item.picture" class="m-r-20" height="120" loadMode="async" row="2"
+                        <Image :src="url+config.image_route+item.picture" class="m-r-20" height="120" loadMode="async" row="2"
                                stretch="aspectFill"/>
 
                         <StackLayout col="1" row="2" verticalAlignment="center">
                             <Label class="p-b-10">
                                 <FormattedString ios.fontFamily="system">
-                                    <Span class="fas cars-list__item-icon" text.decode="&#xf1b9;    "></Span>
+                                    <Span class="fas cars-list__item-icon" text="Estoque: "></Span>
                                     <Span :text="item.quantity"/>
-                                </FormattedString>
-                            </Label>
-                            <Label class="p-b-10">
-                                <FormattedString ios.fontFamily="system">
-                                    <Span class="fas cars-list__item-icon" text.decode="&#xf085;   "/>
-                                    <Span :text="item.quantity"/>
-                                    <Span text=" Transmission"/>
-                                </FormattedString>
-                            </Label>
-                            <Label class="p-b-10">
-                                <FormattedString ios.fontFamily="system">
-                                    <Span class="fas cars-list__item-icon" text.decode="&#xf2dc;    "/>
-                                    <Span :text="item.category_id ? 'Yes' : 'No'"/>
                                 </FormattedString>
                             </Label>
                         </StackLayout>
@@ -53,8 +40,7 @@
 </template>
 
 <script>
-  import CarDetails from "./CarDetails";
-  import db from "~/car-rental-export-public.json"
+  import ProductDetails from "./ProductDetails";
   import config from "~/config.json"
   import axios from 'axios';
 
@@ -63,12 +49,14 @@
     data: () => {
         return {
             url: config.url,
+            config: config,
             products: []
         }
     },
 
     mounted () {
-        let url = this.url+'/product/search?supermarket_id=3';
+        let supermarket_id = config.supermarket_id;
+        let url = this.url+'/product/search?supermarket_id='+supermarket_id;
         axios.get(url)
             .then(data => {
                 this.products = data["data"];
@@ -87,7 +75,7 @@
     methods: {
       onItemTap(args) {
         this.$emit("select", args.item);
-        this.$navigateTo(CarDetails, {props: {car: args.item}});
+        this.$navigateTo(ProductDetails, {props: {product: args.item}});
       }
     }
   };

@@ -1,15 +1,15 @@
 <template>
   <Frame>
-    <CarList :cars="cars" />
+    <ProductList />
   </Frame>
 </template>
 
 <script>
-import CarList from './CarList'
+import ProductList from './ProductList'
 
 export default {
   components: {
-    CarList,
+    ProductList,
   },
 
   data() {

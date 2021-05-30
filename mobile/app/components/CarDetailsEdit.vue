@@ -70,7 +70,7 @@
 
 <script>
   import { alert } from "@nativescript/core";
-  import CarList from "./CarList";
+  import CarList from "./ProductList";
   import Selector from "./Selector";
   import AddRemoveImage from "./AddRemoveImage";
 
