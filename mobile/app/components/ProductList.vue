@@ -1,6 +1,7 @@
 <template>
     <Page>
         <ActionBar>
+            <NavigationButton @tap="$navigateBack()" android.systemIcon="ic_menu_back"/>
             <Label horizontalAlignment="center" text="Lista de produtos"/>
         </ActionBar>   
 
@@ -45,7 +46,8 @@
   import axios from 'axios';
 
   export default {
-    
+    props: ["category"],
+
     data: () => {
         return {
             url: config.url,
@@ -56,7 +58,7 @@
 
     mounted () {
         let supermarket_id = config.supermarket_id;
-        let url = this.url+'/product/search?supermarket_id='+supermarket_id;
+        let url = this.url+'/product/search?supermarket_id='+supermarket_id+'&category_id='+this.category;
         axios.get(url)
             .then(data => {
                 this.products = data["data"];

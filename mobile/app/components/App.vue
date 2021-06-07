@@ -1,15 +1,15 @@
 <template>
   <Frame>
-    <ProductList />
+    <CategoryList />
   </Frame>
 </template>
 
 <script>
-import ProductList from './ProductList'
+import CategoryList from './CategoryList'
 
 export default {
   components: {
-    ProductList,
+    CategoryList,
   },
 
   data() {
