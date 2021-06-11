@@ -1,3 +1,6 @@
 node_modules
 knexfile.js
 .env
+
+buildApk/builds/*
+buildApk/keystore.jks
