@@ -3,4 +3,5 @@ knexfile.js
 .env
 
 buildApk/builds/*
+buildApk/app/*
 buildApk/keystore.jks

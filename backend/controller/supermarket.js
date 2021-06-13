@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt-nodejs')
 const  fs = require('fs');
-
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.core.validation
@@ -175,6 +176,20 @@ module.exports = app => {
         }
     }
 
+    const download = async(req, res) => {
+        let { stdout, stderr } = await exec('pwd');
+        let pwd = stdout
+        let supermarket_id = req.payload.id;
+
+        let resultado = await exec('bash '+pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/build.sh '+supermarket_id);
+        
+        if(resultado['stderr'] !== ''){
+            res.status(400).json({msg:"Ocorreu um erro ao gerar o aplicativo!"})
+        }
+
+        return res.download(pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/builds/app_'+supermarket_id+'.apk', 'app_'+supermarket_id+'.apk');
+    }
+
 	//Retorna os métodos
-	return { create, update, list, private}
+	return { create, update, list, private, download}
 }

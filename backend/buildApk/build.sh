@@ -2,12 +2,13 @@
 
 echo "Iniciando build..."
 
-APK_TOOL="$(pwd)/apktool.jar"
-APP="$(pwd)/app/"
-BUILD_PATH="$(pwd)/builds"
+LOCATION="$(pwd)/buildApk"
+APK_TOOL="$LOCATION/apktool.jar"
+APP="$LOCATION/app"
+BUILD_PATH="$LOCATION/builds"
 STORE_ID=$1
 
-if [ -f $APP ]; then
+if [ -d $APP ]; then
     sed -i "s/\"supermarket_id\":\".*\"/\"supermarket_id\":\"$STORE_ID\"/" "$APP/assets/app/bundle.js"
     echo "ID do mercado alterado"
 fi
@@ -20,16 +21,16 @@ java -jar "$APK_TOOL" b $APP -o "$BUILD_PATH/app_$STORE_ID.apk"
 echo "Compilação finalizada"
 
 echo "Gerando chaves para assinatura"
-if [ -f "$(pwd)/keystore.jks" ]; then
-    rm "$(pwd)/keystore.jks"
-fi 
+if [ -f "$LOCATION/keystore.jks" ]; then
+    rm "$LOCATION/keystore.jks"
+fi
 keytool -genkey -alias supermarket \
-    -keyalg RSA -keystore "$(pwd)/keystore.jks" \
+    -keyalg RSA -keystore "$LOCATION/keystore.jks" \
     -dname "CN=Supermarket Store, OU=JavaSoft, O=Moon, L=Cupertino, S=California, C=BR" \
     -storepass passwordtop -keypass passwordtop
 
 echo "Assinando apk com a chave"
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$(pwd)/keystore.jks" -storepass "passwordtop" -keypass "passwordtop" "$BUILD_PATH/app_$STORE_ID.apk" supermarket
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$LOCATION/keystore.jks" -storepass "passwordtop" -keypass "passwordtop" "$BUILD_PATH/app_$STORE_ID.apk" supermarket
 echo "Apk assinado"
 
 echo "Build finalizado"
