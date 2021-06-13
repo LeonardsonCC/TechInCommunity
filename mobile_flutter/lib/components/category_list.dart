@@ -16,11 +16,6 @@ class CategoryPageState extends State<CategoryPage> {
  	List data;
  	Map config;
 
-	Future<String> getConfig() async {
-		this.config = json.decode(await rootBundle.loadString('config.json'));
-		return "Success!";
-	}
-
 	Future<String> getData() async {
 		this.config = json.decode(await rootBundle.loadString('config.json'));
 
@@ -58,7 +53,7 @@ class CategoryPageState extends State<CategoryPage> {
 						    MaterialPageRoute(
 						    	builder: (context) => ProductPage(),
 						        settings: RouteSettings(arguments: {'category_id': data[index]["id"], 'category_name':data[index]["name"]},
-                  ),),
+                  			),),
 						  );
 				    },
 				    child: Row(

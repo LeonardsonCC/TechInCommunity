@@ -1,5 +1,5 @@
 {
-	"url": "http://192.168.10.104:8081",
+	"url": "https://tech.leonardson.cc/node",
 	"image_route": "/public/images/",
-	"supermarket_id":"3"
+	"supermarket_id":"2"
 }

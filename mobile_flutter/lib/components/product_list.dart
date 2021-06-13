@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:mercatop/components/product_details.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -16,11 +17,6 @@ class ProductPageState extends State<ProductPage> {
  	Map config;
  	var args;
     String appBarTitle = "";
-
-	Future<String> getConfig() async {
-		this.config = json.decode(await rootBundle.loadString('config.json'));
-		return "Success!";
-	}
 
 	Future<String> getData(args) async {
 		this.config = json.decode(await rootBundle.loadString('config.json'));
@@ -59,7 +55,13 @@ class ProductPageState extends State<ProductPage> {
 			return new	Card(
 				  child: new InkWell(
 				    onTap: () {
-						  Navigator.pop(context);
+						  Navigator.push(
+						    context,
+						    MaterialPageRoute(
+						    	builder: (context) => ProductDetailsPage(),
+						        settings: RouteSettings(arguments: {"product":data[index],"image_route":this.config["url"]+this.config["image_route"]},
+                  			),),
+						  );
 				    },
 				    child: Row(
 				     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
