@@ -1,0 +1,5 @@
+{
+	"url": "http://192.168.10.104:8081",
+	"image_route": "/public/images/",
+	"supermarket_id":"3"
+}
