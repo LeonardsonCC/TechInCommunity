@@ -15,6 +15,7 @@ class ProductPageState extends State<ProductPage> {
  	List data;
  	Map config;
  	var args;
+    String appBarTitle = "";
 
 	Future<String> getConfig() async {
 		this.config = json.decode(await rootBundle.loadString('config.json'));
@@ -31,6 +32,7 @@ class ProductPageState extends State<ProductPage> {
 		);
 
 		this.setState(() {
+			appBarTitle = args["category_name"];
 		  	data = json.decode(response.body);
 		});
 
@@ -45,14 +47,12 @@ class ProductPageState extends State<ProductPage> {
 	      });
 	      this.getData(args);
 	    });
-
-		this.getConfig();
 	}
 
 	@override
 	Widget build(BuildContext context){
 		return new Scaffold(
-		  appBar: new AppBar(title: new Text("Produtos"), backgroundColor: Colors.blue),
+		  appBar: new AppBar(title: new Text(appBarTitle), backgroundColor: Colors.blue),
 		  body: new ListView.builder(
 		    itemCount: data == null ? 0 : data.length,
 		    itemBuilder: (BuildContext context, int index){

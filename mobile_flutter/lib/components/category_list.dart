@@ -40,7 +40,6 @@ class CategoryPageState extends State<CategoryPage> {
 
 	@override
 	void initState(){
-		this.getConfig();
 		this.getData();
 	}
 
@@ -58,7 +57,7 @@ class CategoryPageState extends State<CategoryPage> {
 						    context,
 						    MaterialPageRoute(
 						    	builder: (context) => ProductPage(),
-						        settings: RouteSettings(arguments: {'category_id': data[index]["id"]},
+						        settings: RouteSettings(arguments: {'category_id': data[index]["id"], 'category_name':data[index]["name"]},
                   ),),
 						  );
 				    },
