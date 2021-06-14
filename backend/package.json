@@ -4,7 +4,7 @@
   "description": "Sistema online para mercados",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon --ignore ./buildApk/ index.js"
   },
   "repository": {
     "type": "git",
