@@ -34,6 +34,17 @@
                   required
                 ></v-text-field>
               </v-col>
+              <v-col
+                cols="12"
+                sm="12"
+                md="12"
+              >
+                <v-file-input
+                  show-size
+                  v-model="category.picture"
+                  label="Imagem da Categoria"
+                ></v-file-input>
+              </v-col>
             </v-row>
           </v-container>
           <small>* indica que o campo é obrigatório</small>
@@ -71,6 +82,7 @@
         category: {
           name: "",
           description: "",
+          picture: null,
         }
       }
     }

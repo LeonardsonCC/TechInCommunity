@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { toBase64, getImageUrl } from "../../providers/file";
 import { fetchCategories, addCategory } from "../../providers/api/categories";
 import * as authorization from "../../providers/authorization";
 
@@ -62,6 +63,10 @@ export default {
       fetchCategoriesList: function () {
           fetchCategories(authorization.getInfo().id)
             .then(({ data }) => {
+              data = data.map((item) => {
+                  item.picture = getImageUrl(item.picture);
+                  return item;
+              })
               this.categories = data;
             })
             .catch((err) => console.log(err))
@@ -69,14 +74,16 @@ export default {
       showNewCategoryForm: function () {
           this.categoryFormActive = true;
       },
-      newCategorySubmitHandler: function (category) {
+      newCategorySubmitHandler: async function (category) {
           if (!category.name &&
               !category.description) {
             throw new Error("Erro ao validar atributos da categoria");
           }
 
+         const base64picture = await toBase64(category.picture);
          addCategory({
-            ...category
+            ...category,
+             picture: base64picture
           })
             .then((data) => {
               this.categoryFormActive = false;
