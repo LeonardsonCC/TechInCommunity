@@ -184,7 +184,8 @@ module.exports = app => {
         let resultado = await exec('bash '+pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/build.sh '+supermarket_id);
         
         if(resultado['stderr'] !== ''){
-            res.status(400).json({msg:"Ocorreu um erro ao gerar o aplicativo!"})
+            console.log(resultado['strerr'])
+            return res.status(400).json({msg:"Ocorreu um erro ao gerar o aplicativo!"})
         }
 
         return res.download(pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/builds/app_'+supermarket_id+'.apk', 'app_'+supermarket_id+'.apk');
