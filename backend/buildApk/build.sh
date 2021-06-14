@@ -9,7 +9,7 @@ BUILD_PATH="$LOCATION/builds"
 STORE_ID=$1
 
 if [ -d $APP ]; then
-    sed -i "s/\"supermarket_id\":\".*\"/\"supermarket_id\":\"$STORE_ID\"/" "$APP/assets/app/bundle.js"
+    sed -i "s/\"supermarket_id\":\".*\"/\"supermarket_id\":\"$STORE_ID\"/" "$APP/assets/flutter_assets/assets/config.json"
     echo "ID do mercado alterado"
 fi
 
@@ -23,7 +23,7 @@ echo "Compilação finalizada"
 echo "Gerando chaves para assinatura"
 if [ -f "$LOCATION/keystore.jks" ]; then
     rm "$LOCATION/keystore.jks"
-fi
+fi 
 keytool -genkey -alias supermarket \
     -keyalg RSA -keystore "$LOCATION/keystore.jks" \
     -dname "CN=Supermarket Store, OU=JavaSoft, O=Moon, L=Cupertino, S=California, C=BR" \

@@ -17,7 +17,7 @@ class CategoryPageState extends State<CategoryPage> {
  	Map config;
 
 	Future<String> getData() async {
-		this.config = json.decode(await rootBundle.loadString('config.json'));
+		this.config = json.decode(await rootBundle.loadString('assets/config.json'));
 
 		var response = await http.get(
 			Uri.encodeFull(this.config["url"]+"/category?supermarket_id="+this.config["supermarket_id"]),

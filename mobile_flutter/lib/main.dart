@@ -6,4 +6,3 @@ void main() {
     home: new CategoryPage()
   ));
 }
-

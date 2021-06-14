@@ -19,7 +19,7 @@ class ProductPageState extends State<ProductPage> {
     String appBarTitle = "";
 
 	Future<String> getData(args) async {
-		this.config = json.decode(await rootBundle.loadString('config.json'));
+		this.config = json.decode(await rootBundle.loadString('assets/config.json'));
 		var response = await http.get(
 			Uri.encodeFull(this.config["url"]+"/product/search?supermarket_id="+this.config["supermarket_id"]+"&category_id="+args["category_id"].toString()),
 			headers: {
