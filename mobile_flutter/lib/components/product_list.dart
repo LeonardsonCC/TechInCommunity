@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mercatop/components/product_details.dart';
+import 'package:mercatop/components/app_bar.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -48,7 +49,7 @@ class ProductPageState extends State<ProductPage> {
 	@override
 	Widget build(BuildContext context){
 		return new Scaffold(
-		  appBar: new AppBar(title: new Text(appBarTitle), backgroundColor: Colors.blue),
+		  appBar: CustomAppBar.getAppBar(appBarTitle, Colors.blue),
 		  body: new ListView.builder(
 		    itemCount: data == null ? 0 : data.length,
 		    itemBuilder: (BuildContext context, int index){

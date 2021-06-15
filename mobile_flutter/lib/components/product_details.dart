@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mercatop/components/app_bar.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
 	Widget build(BuildContext context){
 		args = ModalRoute.of(context).settings.arguments;
 		return new Scaffold(
-		  appBar: new AppBar(title: new Text(args["product"]["name"]), backgroundColor: Colors.blue),
+		  appBar: CustomAppBar.getAppBar(args["product"]["name"], Colors.blue),
 		  body: new Card(
             clipBehavior: Clip.antiAlias,
             child: Column(
