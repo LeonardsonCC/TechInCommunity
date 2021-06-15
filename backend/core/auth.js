@@ -72,7 +72,7 @@ module.exports = app =>
                         }
 
                         req.payload = payload
-                        
+
                         next();
                     }
                     else{
@@ -99,6 +99,7 @@ module.exports = app =>
         const payload = {
             exp: now + (tokenLifeTime*60),
 			id: obj.id,
+            name: obj.name,
             type: type
         }
 
