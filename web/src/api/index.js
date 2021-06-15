@@ -6,7 +6,7 @@ const BASE_URL = "http://localhost:8081/";
 // Logged Users
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
+  timeout: 60000,
   responseType: 'json',
   headers: {
     "Authorization": `Bearer ${authorizationToken}`,

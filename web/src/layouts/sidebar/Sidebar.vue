@@ -94,6 +94,11 @@ export default {
         title: "Produtos",
         icon: "mdi-book",
         to: "/pages/products"
+      },
+      {
+        title: "Gerar aplicativo",
+        icon: "mdi-download",
+        to: "/pages/download"
       }
     ]
   }),

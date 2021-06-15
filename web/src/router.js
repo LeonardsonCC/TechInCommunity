@@ -34,13 +34,16 @@ export default new Router({
           path: 'pages/products',
           component: () => import('@/views/pages/Produtos'),
         },
-
         {
           name: 'Profile',
           path: 'pages/profile',
           component: () => import('@/views/pages/Profile'),
         },
-
+        {
+          name: 'Gerar Download',
+          path: 'pages/download',
+          component: () => import('@/views/pages/Download'),
+        },
       ]
     },
 

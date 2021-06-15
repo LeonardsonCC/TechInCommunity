@@ -14,3 +14,11 @@ export const update = (data) => {
     data: JSON.stringify(data)
   })
 }
+
+export const download = () => {
+  return api({
+    method: "POST",
+    url: "supermarket/download",
+    responseType: 'blob',
+  })
+}
