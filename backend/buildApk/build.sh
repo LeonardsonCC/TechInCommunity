@@ -7,9 +7,13 @@ APK_TOOL="$LOCATION/apktool.jar"
 APP="$LOCATION/app"
 BUILD_PATH="$LOCATION/builds"
 STORE_ID=$1
+APP_PACKAGE=$2
+APP_NAME=$3
 
 if [ -d $APP ]; then
     sed -i "s/\"supermarket_id\":\".*\"/\"supermarket_id\":\"$STORE_ID\"/" "$APP/assets/flutter_assets/assets/config.json"
+    sed -i "s/android:label=\".*\"/android:label=\"$APP_NAME\"/" "$APP/AndroidManifest.xml"
+    sed -i "s/package=\".*\"/package=\"$APP_PACKAGE\"/" "$APP/AndroidManifest.xml"
     echo "ID do mercado alterado"
 fi
 
