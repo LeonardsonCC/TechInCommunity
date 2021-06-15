@@ -3,6 +3,7 @@ import 'package:mercatop/components/category_list.dart';
 
 void main() {
   runApp(new MaterialApp(
-    home: new CategoryPage()
+    home: new CategoryPage(),
+    debugShowCheckedModeBanner: false
   ));
 }

@@ -14,7 +14,7 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
 	Widget build(BuildContext context){
 		args = ModalRoute.of(context).settings.arguments;
 		return new Scaffold(
-		  appBar: CustomAppBar.getAppBar(args["product"]["name"], Colors.blue),
+		  appBar: CustomAppBar.getAppBar(context, args["product"]["name"], Colors.blue),
 		  body: new Card(
             clipBehavior: Clip.antiAlias,
             child: Column(

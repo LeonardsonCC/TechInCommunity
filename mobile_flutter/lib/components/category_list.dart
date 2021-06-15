@@ -42,7 +42,7 @@ class CategoryPageState extends State<CategoryPage> {
 	@override
 	Widget build(BuildContext context){
 		return new Scaffold(
-		  appBar: CustomAppBar.getAppBar("Categorias", Colors.blue),
+		  appBar: CustomAppBar.getAppBar(context, "Categorias", Colors.blue),
 		  body: new ListView.builder(
 		    itemCount: data == null ? 0 : data.length,
 		    itemBuilder: (BuildContext context, int index){

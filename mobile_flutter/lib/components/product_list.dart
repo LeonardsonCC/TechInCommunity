@@ -49,7 +49,7 @@ class ProductPageState extends State<ProductPage> {
 	@override
 	Widget build(BuildContext context){
 		return new Scaffold(
-		  appBar: CustomAppBar.getAppBar(appBarTitle, Colors.blue),
+		  appBar: CustomAppBar.getAppBar(context, appBarTitle, Colors.blue),
 		  body: new ListView.builder(
 		    itemCount: data == null ? 0 : data.length,
 		    itemBuilder: (BuildContext context, int index){
