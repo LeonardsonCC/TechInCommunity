@@ -3,9 +3,6 @@
     <!-- TableSimpleFixHeader -->
     <!-- ----------------------------------------------------------------------------- -->
     <div>
-        <v-list-item-subtitle class="text-wrap">
-          Lista de Categories
-        </v-list-item-subtitle>
         <div class="mt-4">
             <v-simple-table fixed-header height="300px">
                 <template v-slot:default>
