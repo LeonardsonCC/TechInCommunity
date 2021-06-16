@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mercatop/components/login.dart';
+import 'package:mercatop/components/my_account.dart';
 
 
 class CustomAppBar {
@@ -18,7 +19,7 @@ class CustomAppBar {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LoginPage(),
+                builder: (context) => MyAccountPage(),
                 settings: RouteSettings(),
               ),
             );
