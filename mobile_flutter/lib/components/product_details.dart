@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mercatop/components/app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mercatop/components/utils.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   @override
@@ -9,12 +11,25 @@ class ProductDetailsPage extends StatefulWidget {
 class ProductDetailsPageState extends State<ProductDetailsPage> {
 
  	var args;
+ 	String token = "";
+
+  getData() async {
+    SharedPreferences prefs = await Utils.getPrefs();
+    this.setState(() {
+      token = prefs.getString("token");
+    });
+  }
+
+  @override
+  void initState(){
+    getData();
+  }
 
 	@override
 	Widget build(BuildContext context){
 		args = ModalRoute.of(context).settings.arguments;
 		return new Scaffold(
-		  appBar: CustomAppBar.getAppBar(context, args["product"]["name"], Colors.blue),
+		  appBar: CustomAppBar.getAppBar(context, args["product"]["name"], Colors.blue, token: token),
 		  body: new Card(
             clipBehavior: Clip.antiAlias,
             child: Column(

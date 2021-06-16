@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:mercatop/components/product_details.dart';
 import 'package:mercatop/components/app_bar.dart';
+import 'package:mercatop/components/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductPage extends StatefulWidget {
   @override
@@ -14,10 +16,11 @@ class ProductPage extends StatefulWidget {
 
 class ProductPageState extends State<ProductPage> {
 
+	String token = "";
  	List data;
  	Map config;
  	var args;
-    String appBarTitle = "";
+ 	String appBarTitle = "";
 
 	Future<String> getData(args) async {
 		this.config = json.decode(await rootBundle.loadString('assets/config.json'));
@@ -28,9 +31,11 @@ class ProductPageState extends State<ProductPage> {
 		  	}
 		);
 
+		SharedPreferences prefs = await Utils.getPrefs();
 		this.setState(() {
 			appBarTitle = args["category_name"];
 		  	data = json.decode(response.body);
+				token = prefs.getString("token");
 		});
 
 		return "Success!";
@@ -49,7 +54,7 @@ class ProductPageState extends State<ProductPage> {
 	@override
 	Widget build(BuildContext context){
 		return new Scaffold(
-		  appBar: CustomAppBar.getAppBar(context, appBarTitle, Colors.blue),
+		  appBar: CustomAppBar.getAppBar(context, appBarTitle, Colors.blue, token: token),
 		  body: new ListView.builder(
 		    itemCount: data == null ? 0 : data.length,
 		    itemBuilder: (BuildContext context, int index){
