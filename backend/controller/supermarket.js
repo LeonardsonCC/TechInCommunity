@@ -178,21 +178,33 @@ module.exports = app => {
 
     const download = async(req, res) => {
         let { stdout, stderr } = await exec('pwd');
+
         let pwd = stdout
+
         let supermarket_id = req.payload.id;
-        let supermarket_logo = req.payload.logo;
-        let supermarket_name = req.payload.name;
+
+        let supermarket = await app.db('supermarket')
+            .where({ id: supermarket_id }).first()
+
+        let supermarket_logo = supermarket.logo;
+        let supermarket_name = supermarket.name;
         let digits = {"1":"on","2":"tw","3":"th","4":"fo","5":"fi","6":"si","7":"se","8":"ei","9":"ni","0":"ze"};
         let digits_name = "";
 
         for (var i = 0; i < supermarket_id.toString().length; i++) {
           digits_name+=digits[supermarket_id.toString()[i]];
         }
-        let package_name = "com.mercatop."+supermarket_name.split(" ")[0].toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "").substr(0,5)+digits_name
+        let package_name = "com.mercatop."+"merca"+digits_name
 
-        let resultado = await exec('bash '+pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/build.sh '+supermarket_id+' "'+package_name+'" "'+supermarket_name+'" "'+supermarket_logo+'"');
+        try {
+            let resultado = await exec('bash '+pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/build.sh '+supermarket_id+' "'+package_name+'" "'+supermarket_name+'" "'+supermarket_logo+'"');
 
-        return res.download(pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/builds/app_'+supermarket_id+'.apk', 'app_'+supermarket_id+'.apk');
+            return res.download(pwd.replace(/(\r\n|\n|\r)/gm, "")+'/buildApk/builds/app_'+supermarket_id+'.apk', 'app_'+supermarket_id+'.apk');
+        }
+        catch(err){
+            console.log(err);
+            return res.status(400).json({msg:"Ocorreu um erro ao gerar o aplicativo!"})
+        }
     }
 
 	//Retorna os métodos

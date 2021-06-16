@@ -43,3 +43,4 @@ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$LOCATION/keys
 echo "Apk assinado"
 
 echo "Build finalizado"
+
