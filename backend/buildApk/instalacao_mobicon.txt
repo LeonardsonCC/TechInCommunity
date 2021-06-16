@@ -1,0 +1,13 @@
+
+Passos para instalar mobicon-cli:
+
+
+sudo apt install graphicsmagick
+
+sudo npm install --global mobicon-cli
+
+Acessar /usr/local/lib/node_modules/mobicon-cli/node_modules/mobicon
+
+Modificar arquivo index.js: Linha 82: icon.file=icon.file.replace("icon","ic_launcher");
+
+

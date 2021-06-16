@@ -100,6 +100,7 @@ module.exports = app =>
             exp: now + (tokenLifeTime*60),
 			id: obj.id,
             name: obj.name,
+            logo: obj.logo,
             type: type
         }
 
