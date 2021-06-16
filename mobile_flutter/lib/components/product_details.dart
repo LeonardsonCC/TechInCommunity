@@ -49,16 +49,17 @@ class ProductDetailsPageState extends State<ProductDetailsPage> {
 					),
                 ),
                 ButtonBar(
-                  alignment: MainAxisAlignment.start,
+                  alignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
                       onPressed: () {
                         print("Adicionou ao carrinho xD");
                       },
                       child: new Icon(
-				          Icons.shopping_cart,
-				          color: Colors.black87,
-				        ),
+      				          Icons.shopping_cart,
+      				          color: Colors.black87,
+                        size:50.0
+      				        ),
                     ),
                   ],
                 ),

@@ -72,13 +72,16 @@ class ProductPageState extends State<ProductPage> {
 				    child: Row(
 				     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 				     children: <Widget>[
-				         Image.network(this.config["url"]+this.config["image_route"]+data[index]["picture"], height: 150, width: 150),
-						 Column(
-					          mainAxisAlignment: MainAxisAlignment.center,
-					          children: [
-					            Text(data[index]["name"], style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-					            Text("R\$"+data[index]["price"].toString()+"/"+data[index]["unit"]),
-					          ]
+						Image.network(this.config["url"]+this.config["image_route"]+data[index]["picture"], height: 150, width: 150),
+						Container (
+						  padding: const EdgeInsets.all(16.0),
+						  width: MediaQuery.of(context).size.width*0.4,
+						  child: new Column (
+						    children: <Widget>[
+					            new Text(data[index]["name"], textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+					            new Text("R\$"+data[index]["price"].toString()+"/"+data[index]["unit"]),
+						    ],
+						  ),
 						),
 				     ],
 					),
