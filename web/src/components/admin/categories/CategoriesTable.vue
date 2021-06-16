@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in categoriesList" :key="item.name" @click="$emit('edit', item.id)">
+                    <tr v-for="item in categoriesList" :key="item.name" @click="$emit('edit', item)">
                       <td>
                         <v-img  
                           :src="item.picture" 

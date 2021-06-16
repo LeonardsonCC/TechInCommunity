@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authorizationToken from "../providers/authorization";
 
-const BASE_URL = "http://localhost:8081/";
+const BASE_URL = "https://tech.leonardson.cc/node/";
 
 // Logged Users
 const axiosInstance = axios.create({

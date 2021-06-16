@@ -13,6 +13,7 @@
           </BaseCard>
         </v-col>
         <category-form 
+          :category="categoryFormEdit"
           :show="categoryFormActive"
           @close="categoryFormActive = !categoryFormActive"
           @submit="newCategorySubmitHandler"
@@ -33,7 +34,7 @@
 
 <script>
 import { toBase64, getImageUrl } from "../../providers/file";
-import { fetchCategories, addCategory } from "../../providers/api/categories";
+import { fetchCategories, addCategory, updateCategory } from "../../providers/api/categories";
 import * as authorization from "../../providers/authorization";
 
 export default {
@@ -41,6 +42,12 @@ export default {
 
   data: () => ({
     categoryFormActive: false,
+    categoryFormEdit: {
+        id: -1,
+        name: "",
+        description: "",
+        picture: null,
+    },
     categories: [],
     needUpdate: false,
   }),
@@ -73,28 +80,60 @@ export default {
       },
       showNewCategoryForm: function () {
           this.categoryFormActive = true;
+          this.categoryFormEdit = {
+              id: -1,
+              name: "",
+              description: "",
+              picture: null,
+          };
       },
       newCategorySubmitHandler: async function (category) {
-          if (!category.name &&
-              !category.description) {
-            throw new Error("Erro ao validar atributos da categoria");
+          // Update Category
+          if (category.id > 0) {
+              if (!category.name &&
+                  !category.description) {
+                throw new Error("Erro ao validar atributos da categoria");
+              }
+
+             let data = {
+                ...category,
+             }
+             if (category.picture !== null) {
+                 const base64picture = await toBase64(category.picture);
+                 data.picture = base64picture;
+             }
+             updateCategory(data)
+                .then((data) => {
+                  this.categoryFormActive = false;
+                  console.log(data);
+                  this.needUpdate = true;
+                })
+                .catch((err) => console.error(err))
+          } else {
+              // New category
+              if (!category.name &&
+                  !category.description) {
+                throw new Error("Erro ao validar atributos da categoria");
+              }
+
+             const base64picture = await toBase64(category.picture);
+             addCategory({
+                ...category,
+                 picture: base64picture
+              })
+                .then((data) => {
+                  this.categoryFormActive = false;
+                  console.log(data);
+                  this.needUpdate = true;
+                })
+                .catch((err) => console.error(err))
           }
-
-         const base64picture = await toBase64(category.picture);
-         addCategory({
-            ...category,
-             picture: base64picture
-          })
-            .then((data) => {
-              this.categoryFormActive = false;
-              console.log(data);
-              this.needUpdate = true;
-            })
-            .catch((err) => console.error(err))
-
       },
-      categoryRowClick: function (name) {
-          console.log("Click", name)
+      categoryRowClick: function (category) {
+          console.log("Click", category);
+          this.categoryFormEdit = category;
+          this.categoryFormActive = true;
+          this.needUpdate = true;
       }
   }
 };

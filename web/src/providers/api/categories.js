@@ -8,6 +8,14 @@ export const addCategory = (data) => {
   })
 }
 
+export const updateCategory = (data) => {
+  return api({
+    method: "PUT",
+    url: "category",
+    data: JSON.stringify(data)
+  })
+}
+
 export const fetchCategories = (supermarketId) => {
   return api({
     method: "GET",

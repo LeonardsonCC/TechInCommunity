@@ -29,7 +29,7 @@
                 md="12"
               >
                 <v-text-field
-                  label="Descricao da Categoria"
+                  label="Descrição da Categoria"
                   v-model="category.description"
                   required
                 ></v-text-field>
@@ -75,16 +75,11 @@
 
   export default {
     props: [
-      "show"
+      "show",
+      "category"
     ],
     data: function () {
-      return {
-        category: {
-          name: "",
-          description: "",
-          picture: null,
-        }
-      }
-    }
+      return {}
+    },
   }
 </script>
