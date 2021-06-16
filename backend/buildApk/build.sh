@@ -28,17 +28,18 @@ echo "Iniciando compilação da APK"
 java -jar "$APK_TOOL" b $APP -o "$BUILD_PATH/app_$STORE_ID.apk"
 echo "Compilação finalizada"
 
-echo "Gerando chaves para assinatura"
-if [ -f "$LOCATION/keystore.jks" ]; then
-    rm "$LOCATION/keystore.jks"
-fi 
-keytool -genkey -alias supermarket \
-    -keyalg RSA -keystore "$LOCATION/keystore.jks" \
-    -dname "CN=Supermarket Store, OU=JavaSoft, O=Moon, L=Cupertino, S=California, C=BR" \
-    -storepass passwordtop -keypass passwordtop
+if [ ! -f  "$LOCATION/keystore_$STORE_ID.jks" ]; then
+    echo "Gerando chaves para assinatura"
+    keytool -genkey -alias supermarket \
+        -keyalg RSA -keystore "$LOCATION/keystore_$STORE_ID.jks" \
+        -dname "CN=Supermarket Store, OU=JavaSoft, O=Moon, L=Cupertino, S=California, C=BR" \
+        -storepass passwordtop -keypass passwordtop
+else
+    echo "Keystore já gerada"
+fi
 
 echo "Assinando apk com a chave"
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$LOCATION/keystore.jks" -storepass "passwordtop" -keypass "passwordtop" "$BUILD_PATH/app_$STORE_ID.apk" supermarket
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$LOCATION/keystore_$STORE_ID.jks" -storepass "passwordtop" -keypass "passwordtop" "$BUILD_PATH/app_$STORE_ID.apk" supermarket
 echo "Apk assinado"
 
 echo "Build finalizado"
