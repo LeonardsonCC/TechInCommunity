@@ -12,7 +12,7 @@
 							<v-row>
 								<v-col cols="12" md="6">
 									<v-text-field
-										label="Razao Social (nao usado)"
+										label="Razao Social"
 										filled
 										background-color="transparent"
 									></v-text-field>
@@ -35,7 +35,7 @@
 								</v-col>
 								<v-col cols="12" md="6">
 									<v-text-field
-										label="CNAE (nao usado)"
+										label="CNAE"
 										filled
 										background-color="transparent"
 									></v-text-field>
