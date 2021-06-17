@@ -4,9 +4,6 @@
       <span class="logo-icon">
         <img src="../../assets/logo-light-icon.png" />
       </span>
-      <span class="logo-text ml-2">
-        <img src="../../assets/logo-light-text.png" class="mt-2" />
-      </span>
     </v-toolbar-title>
     <v-app-bar-nav-icon
       class="d-block d-md-none"
