@@ -14,6 +14,6 @@ O problema que buscamos resolver é a necessidade de pequenos supermercados poss
 Criar uma aplicação onde o proprietário cadastra o seu supermercado e seus produtos, com essas informações seria gerado um aplicativo de delivery no qual os clientes podem acessar e realizar suas compras.
 
 ## Tecnologias utilizadas
-[Vue.js](https://vuejs.org/);
-[Flutter](https://flutter.dev/);
-[Node.js](https://nodejs.org/) com [Express.js](https://expressjs.com/);
+- [Vue.js](https://vuejs.org/);
+- [Flutter](https://flutter.dev/);
+- [Node.js](https://nodejs.org/) com [Express.js](https://expressjs.com/);
